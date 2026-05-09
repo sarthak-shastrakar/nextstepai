@@ -21,7 +21,7 @@ const PROTECTED_ROUTES = [
   "/profile",
   "/settings",
 ];
-
+// all done 
 // Routes only for logged-OUT users
 const AUTH_ROUTES = [
   "/login",
