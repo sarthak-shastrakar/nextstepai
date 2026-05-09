@@ -1,5 +1,5 @@
 "use client";
-import { useState, useTransition } from "react";
+import { useState, useTransition, Suspense } from "react";
 import { signIn } from "next-auth/react";
 import { useRouter, useSearchParams } from "next/navigation";
 import Link from "next/link";
@@ -79,7 +79,7 @@ function TabBtn({ active, onClick, icon: Icon, label }) {
   );
 }
 
-export default function LoginPage() {
+function Login() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const callbackUrl = searchParams.get("callbackUrl") || "/";
@@ -343,5 +343,16 @@ export default function LoginPage() {
         </div>
       </motion.div>
     </div>
+}
+
+export default function LoginPage() {
+  return (
+    <Suspense fallback={
+      <div className="min-h-screen w-full flex items-center justify-center bg-slate-950">
+        <Loader2 className="h-8 w-8 text-indigo-500 animate-spin" />
+      </div>
+    }>
+      <Login />
+    </Suspense>
   );
 }
