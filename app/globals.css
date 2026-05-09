@@ -1,0 +1,663 @@
+@import "tailwindcss";
+@import "tw-animate-css";
+
+@custom-variant dark (&:is(.dark *));
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --font-sans: var(--font-geist-sans);
+  --font-mono: var(--font-geist-mono);
+  --color-sidebar-ring: var(--sidebar-ring);
+  --color-sidebar-border: var(--sidebar-border);
+  --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
+  --color-sidebar-accent: var(--sidebar-accent);
+  --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
+  --color-sidebar-primary: var(--sidebar-primary);
+  --color-sidebar-foreground: var(--sidebar-foreground);
+  --color-sidebar: var(--sidebar);
+  --color-chart-5: var(--chart-5);
+  --color-chart-4: var(--chart-4);
+  --color-chart-3: var(--chart-3);
+  --color-chart-2: var(--chart-2);
+  --color-chart-1: var(--chart-1);
+  --color-ring: var(--ring);
+  --color-input: var(--input);
+  --color-border: var(--border);
+  --color-destructive: var(--destructive);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-accent: var(--accent);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-muted: var(--muted);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-secondary: var(--secondary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-primary: var(--primary);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-popover: var(--popover);
+  --color-card-foreground: var(--card-foreground);
+  --color-card: var(--card);
+  --radius-sm: calc(var(--radius) - 4px);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) + 4px);
+}
+
+/* ═══════════════════════════════════════════════════
+   LIGHT THEME — Premium Career Coach Palette
+   Inspired by Linear, Notion, Stripe
+   ═══════════════════════════════════════════════════ */
+@layer base {
+  *, ::before, ::after {
+    --tw-ring-color: rgba(0, 0, 0, 0) !important;
+    --tw-ring-shadow: 0 0 #0000 !important;
+    --tw-shadow: 0 0 #0000 !important;
+    --tw-shadow-colored: 0 0 #0000 !important;
+    --tw-outline-color: rgba(0, 0, 0, 0) !important;
+  }
+}
+
+/* Force hex colors for PDF container to avoid oklch errors */
+#resume-pdf {
+  color-scheme: light !important;
+}
+
+#resume-pdf, #resume-pdf * {
+  --tw-border-opacity: 1 !important;
+  --tw-text-opacity: 1 !important;
+  --tw-bg-opacity: 1 !important;
+  --tw-ring-color: transparent !important;
+  --tw-ring-shadow: none !important;
+  --tw-shadow: none !important;
+  --tw-shadow-colored: none !important;
+  --tw-outline-color: transparent !important;
+  outline-color: transparent !important;
+}
+
+:root {
+  --radius: 0.75rem;
+  --background: #FAFBFC;
+  --foreground: #0F172A;
+  --card: #FFFFFF;
+  --card-foreground: #0F172A;
+  --popover: #FFFFFF;
+  --popover-foreground: #0F172A;
+  --primary: #10B981; /* Emerald 500 */
+  --primary-foreground: #FFFFFF;
+  --secondary: #F1F5F9;
+  --secondary-foreground: #1E293B;
+  --muted: #F1F5F9;
+  --muted-foreground: #64748B;
+  --accent: #ECFDF5; /* Emerald 50 */
+  --accent-foreground: #047857; /* Emerald 700 */
+  --destructive: #EF4444;
+  --border: #E2E8F0;
+  --input: #E2E8F0;
+  --ring: #10B981;
+  --chart-1: #10B981;
+  --chart-2: #06B6D4;
+  --chart-3: #8B5CF6;
+  --chart-4: #F59E0B;
+  --chart-5: #3B82F6;
+  --sidebar: #FFFFFF;
+  --sidebar-foreground: #0F172A;
+  --sidebar-primary: #10B981;
+  --sidebar-primary-foreground: #FFFFFF;
+  --sidebar-accent: #ECFDF5;
+  --sidebar-accent-foreground: #047857;
+  --sidebar-border: #E2E8F0;
+  --sidebar-ring: #10B981;
+}
+
+.dark {
+  --background: #0B0F19; /* Deeper Dark for Emerald contrast */
+  --foreground: #F1F5F9;
+  --card: rgba(15, 23, 42, 0.6);
+  --card-foreground: #F1F5F9;
+  --popover: #0F172A;
+  --popover-foreground: #F1F5F9;
+  --primary: #34D399; /* Emerald 400 */
+  --primary-foreground: #022C22; /* Emerald 950 */
+  --secondary: #1E293B;
+  --secondary-foreground: #F1F5F9;
+  --muted: #1E293B;
+  --muted-foreground: #94A3B8;
+  --accent: #064E3B; /* Emerald 900 */
+  --accent-foreground: #A7F3D0; /* Emerald 200 */
+  --destructive: #F87171;
+  --border: rgba(255,255,255,0.08);
+  --input: rgba(255,255,255,0.12);
+  --ring: #34D399;
+  --chart-1: #34D399;
+  --chart-2: #22D3EE; /* Cyan 400 */
+  --chart-3: #818CF8;
+  --chart-4: #FBBF24;
+  --chart-5: #F472B6;
+  --sidebar: #0B0F19;
+  --sidebar-foreground: #F1F5F9;
+  --sidebar-primary: #34D399;
+  --sidebar-primary-foreground: #022C22;
+  --sidebar-accent: #064E3B;
+  --sidebar-accent-foreground: #A7F3D0;
+  --sidebar-border: rgba(255,255,255,0.08);
+  --sidebar-ring: #34D399;
+}
+
+
+/* ═══════════════════════════════════════════════════
+   GLASS UTILITIES
+   ═══════════════════════════════════════════════════ */
+.glass {
+  background: rgba(255, 255, 255, 0.70);
+  backdrop-filter: blur(20px) saturate(180%);
+  -webkit-backdrop-filter: blur(20px) saturate(180%);
+  border: 1px solid rgba(226, 232, 240, 0.6);
+  box-shadow: 
+    0 1px 3px rgba(0, 0, 0, 0.04),
+    0 8px 24px rgba(0, 0, 0, 0.04);
+}
+
+.glass-subtle {
+  background: rgba(255, 255, 255, 0.50);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(226, 232, 240, 0.4);
+}
+
+.glass-dark {
+  background: rgba(15, 23, 42, 0.85);
+  backdrop-filter: blur(24px) saturate(160%);
+  -webkit-backdrop-filter: blur(24px) saturate(160%);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  box-shadow: 
+    0 4px 6px rgba(0, 0, 0, 0.2),
+    0 20px 50px rgba(0, 0, 0, 0.3),
+    inset 0 1px 1px rgba(255, 255, 255, 0.1);
+}
+
+
+/* ═══════════════════════════════════════════════════
+   PREMIUM CARD — Light Theme
+   ═══════════════════════════════════════════════════ */
+.card-premium {
+  background: #FFFFFF;
+  border: 1px solid #E2E8F0;
+  border-radius: 1.25rem;
+  box-shadow: 
+    0 1px 2px rgba(0, 0, 0, 0.03),
+    0 4px 12px rgba(0, 0, 0, 0.04);
+  transition: all 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.card-premium:hover {
+  border-color: #C7D2FE;
+  box-shadow: 
+    0 4px 6px rgba(79, 70, 229, 0.04),
+    0 12px 32px rgba(79, 70, 229, 0.08);
+  transform: translateY(-2px);
+}
+
+
+/* ═══════════════════════════════════════════════════
+   PREMIUM BUTTONS
+   ═══════════════════════════════════════════════════ */
+@keyframes pulse-glow-light {
+  0%, 100% { 
+    box-shadow: 
+      0 4px 14px rgba(79, 70, 229, 0.25),
+      0 0 0 0px rgba(79, 70, 229, 0.0); 
+  }
+  50% { 
+    box-shadow: 
+      0 6px 20px rgba(79, 70, 229, 0.35),
+      0 0 0 4px rgba(79, 70, 229, 0.06); 
+  }
+}
+
+.btn-premium-glow {
+  position: relative;
+  overflow: hidden;
+  background: linear-gradient(135deg, #10B981 0%, #06B6D4 100%);
+  color: #FFFFFF;
+  border: none;
+  font-weight: 700;
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  animation: pulse-glow-light 3s ease-in-out infinite;
+}
+
+.btn-premium-glow::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    105deg, 
+    transparent 40%, 
+    rgba(255, 255, 255, 0.3) 45%, 
+    rgba(255, 255, 255, 0.3) 55%, 
+    transparent 60%
+  );
+  transform: translateX(-200%) skewX(-20deg);
+  transition: transform 0.8s ease-in-out;
+}
+
+.btn-premium-glow:hover::before {
+  transform: translateX(200%) skewX(-20deg);
+}
+
+.btn-premium-glow:hover {
+  box-shadow: 0 8px 30px rgba(16, 185, 129, 0.4);
+  transform: translateY(-1px);
+}
+
+
+/* ═══════════════════════════════════════════════════
+   GRADIENT TEXT UTILITIES
+   ═══════════════════════════════════════════════════ */
+.gradient-title {
+  background: linear-gradient(135deg, #10B981 0%, #06B6D4 50%, #3B82F6 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.gradient-text-hero {
+  background: linear-gradient(135deg, #059669 0%, #10B981 30%, #06B6D4 60%, #3B82F6 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+
+/* ═══════════════════════════════════════════════════
+   SECTION BACKGROUNDS
+   ═══════════════════════════════════════════════════ */
+.section-primary {
+  background-color: #FAFBFC;
+}
+
+.section-alt {
+  background-color: #F8FAFC;
+}
+
+.section-muted {
+  background-color: #F1F5F9;
+}
+
+.section-accent {
+  background: linear-gradient(135deg, #ECFDF5 0%, #D1FAE5 50%, #E0F2FE 100%);
+}
+
+
+/* ═══════════════════════════════════════════════════
+   ANIMATIONS
+   ═══════════════════════════════════════════════════ */
+@keyframes mesh {
+  0% { transform: translate(0, 0) scale(1); }
+  33% { transform: translate(30px, -50px) scale(1.1); }
+  66% { transform: translate(-20px, 20px) scale(0.9); }
+  100% { transform: translate(0, 0) scale(1); }
+}
+
+.animate-mesh {
+  animation: mesh 20s ease-in-out infinite;
+}
+
+@keyframes shimmer-slow {
+  0% { transform: translateX(-100%) skewX(-20deg); }
+  100% { transform: translateX(200%) skewX(-20deg); }
+}
+
+.animate-shimmer-slow {
+  animation: shimmer-slow 8s infinite linear;
+}
+
+@keyframes shimmer {
+  0% { transform: translateX(-100%); }
+  100% { transform: translateX(100%); }
+}
+
+.animate-shimmer {
+  animation: shimmer 3s infinite linear;
+}
+
+@keyframes float-gentle {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-12px); }
+}
+
+.animate-float {
+  animation: float-gentle 6s ease-in-out infinite;
+}
+
+@keyframes fade-in-up {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-fade-in-up {
+  animation: fade-in-up 0.6s ease-out forwards;
+}
+
+@keyframes marquee {
+  0%   { transform: translateX(0); }
+  100% { transform: translateX(-50%); }
+}
+
+.animate-marquee {
+  animation: marquee 30s linear infinite;
+}
+
+@keyframes marquee-reverse {
+  0%   { transform: translateX(-50%); }
+  100% { transform: translateX(0); }
+}
+
+.animate-marquee-reverse {
+  animation: marquee-reverse 35s linear infinite;
+}
+
+
+/* ═══════════════════════════════════════════════════
+   TYPOGRAPHY
+   ═══════════════════════════════════════════════════ */
+.heading-tight {
+  letter-spacing: -0.04em;
+  line-height: 0.95;
+  font-weight: 800;
+}
+
+.text-fluid-lg {
+  font-size: clamp(2.5rem, 8vw, 6rem);
+}
+
+
+/* ═══════════════════════════════════════════════════
+   SELECTION & SCROLLBAR — Light
+   ═══════════════════════════════════════════════════ */
+::selection {
+  background-color: rgba(79, 70, 229, 0.15);
+  color: #1E1B4B;
+}
+
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: #F8FAFC;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #CBD5E1;
+  border-radius: 999px;
+  border: 2px solid #F8FAFC;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #94A3B8;
+}
+
+
+/* ═══════════════════════════════════════════════════
+   BASE LAYER
+   ═══════════════════════════════════════════════════ */
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
+  }
+  body {
+    @apply bg-background text-foreground;
+  }
+}
+
+
+/* ═══════════════════════════════════════════════════
+   DECORATIVE BLOBS — Light Theme
+   ═══════════════════════════════════════════════════ */
+.blob-primary {
+  background: radial-gradient(circle, rgba(79, 70, 229, 0.08) 0%, transparent 70%);
+}
+
+.blob-secondary {
+  background: radial-gradient(circle, rgba(139, 92, 246, 0.06) 0%, transparent 70%);
+}
+
+.blob-accent {
+  background: radial-gradient(circle, rgba(6, 182, 212, 0.05) 0%, transparent 70%);
+}
+
+
+/* ═══════════════════════════════════════════════════
+   STAT BADGE — Floating badges on hero
+   ═══════════════════════════════════════════════════ */
+.stat-badge {
+  background: rgba(255, 255, 255, 0.85);
+  backdrop-filter: blur(20px) saturate(180%);
+  -webkit-backdrop-filter: blur(20px) saturate(180%);
+  border: 1px solid rgba(226, 232, 240, 0.7);
+  border-radius: 1.25rem;
+  box-shadow: 
+    0 4px 6px rgba(0, 0, 0, 0.04),
+    0 10px 30px rgba(0, 0, 0, 0.06);
+}
+
+
+/* ═══════════════════════════════════════════════════
+   PDF Generation Overrides (unchanged)
+   ═══════════════════════════════════════════════════ */
+#resume-pdf {
+  --background: #ffffff !important;
+  --foreground: #000000 !important;
+  --primary: #4F46E5 !important;
+  --primary-foreground: #ffffff !important;
+  --secondary: #f8fafc !important;
+  --muted: #f1f5f9 !important;
+  --muted-foreground: #64748b !important;
+  --accent: #f1f5f9 !important;
+  --border: #e2e8f0 !important;
+  --card: #ffffff !important;
+  --popover: #ffffff !important;
+  --ring: #4F46E5 !important;
+  --input: #e2e8f0 !important;
+  background-color: #ffffff !important;
+  color: #000000 !important;
+  width: 210mm !important;
+  min-height: 297mm !important;
+  opacity: 1 !important;
+  visibility: visible !important;
+  position: relative !important;
+  left: 0 !important;
+}
+
+#resume-pdf * {
+  border-color: #e2e8f0 !important;
+  outline-color: transparent !important;
+  -webkit-print-color-adjust: exact !important;
+  print-color-adjust: exact !important;
+}
+
+#resume-pdf h1, 
+#resume-pdf h2, 
+#resume-pdf h3 {
+  color: #000000 !important;
+}
+
+
+/* ═══════════════════════════════════════════════════
+   CTA GLOW
+   ═══════════════════════════════════════════════════ */
+.cta-glow {
+  box-shadow: 0 0 20px 2px rgba(79, 70, 229, 0.12);
+  transition: box-shadow 0.3s ease;
+}
+
+.cta-glow:hover {
+  box-shadow: 0 0 40px 5px rgba(79, 70, 229, 0.2);
+}
+
+
+/* ═══════════════════════════════════════════════════
+   FEATURE ICON BOX
+   ═══════════════════════════════════════════════════ */
+.feature-icon-box {
+  width: 3.5rem;
+  height: 3.5rem;
+  border-radius: 1rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(135deg, #EEF2FF 0%, #E0E7FF 100%);
+  color: #4F46E5;
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.group:hover .feature-icon-box {
+  background: linear-gradient(135deg, #4F46E5 0%, #7C3AED 100%);
+  color: #FFFFFF;
+  transform: scale(1.1) rotate(3deg);
+  box-shadow: 0 4px 12px rgba(79, 70, 229, 0.3);
+}
+
+
+/* ═══════════════════════════════════════════════════
+   STEP NUMBER BADGE
+   ═══════════════════════════════════════════════════ */
+.step-number {
+  width: 2.5rem;
+  height: 2.5rem;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 800;
+  font-size: 0.875rem;
+  background: linear-gradient(135deg, #4F46E5 0%, #7C3AED 100%);
+  color: #FFFFFF;
+  box-shadow: 
+    0 2px 8px rgba(79, 70, 229, 0.3),
+    0 0 0 4px #FAFBFC;
+}
+
+
+/* ═══════════════════════════════════════════════════
+   HERO IMAGE CONTAINER
+   ═══════════════════════════════════════════════════ */
+.hero-image-wrapper {
+  position: relative;
+  border-radius: 1.5rem;
+  overflow: hidden;
+  background: #FFFFFF;
+  border: 1px solid #E2E8F0;
+  box-shadow: 
+    0 4px 6px rgba(0, 0, 0, 0.02),
+    0 20px 60px rgba(79, 70, 229, 0.08),
+    0 40px 80px rgba(0, 0, 0, 0.06);
+}
+
+.hero-image-wrapper::before {
+  content: "";
+  position: absolute;
+  inset: -1px;
+  border-radius: 1.5rem;
+  padding: 1px;
+  background: linear-gradient(135deg, rgba(79,70,229,0.2), transparent 40%, transparent 60%, rgba(139,92,246,0.2));
+  -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  pointer-events: none;
+}
+
+/* ── Print / PDF Styles ─────────────────────────────── */
+@media print {
+  /* 1. Hide all page UI completely to prevent whitespace */
+  header, 
+  footer, 
+  .print\:hidden,
+  nav,
+  aside {
+    display: none !important;
+  }
+
+  /* 2. Reset the main layout container for print */
+  .container {
+    margin: 0 !important;
+    padding: 0 !important;
+    max-width: none !important;
+    width: auto !important;
+    min-height: 0 !important;
+    position: static !important;
+  }
+
+  body {
+    background: #ffffff !important;
+    margin: 0 !important;
+    padding: 0 !important;
+  }
+
+  /* 3. Position resume at exact page origin — single A4 page only */
+  #resume-pdf {
+    visibility: visible !important;
+    display: block !important;
+    position: fixed !important; /* Fixed is best for print overlays */
+    top: 0 !important;
+    left: 0 !important;
+    width: 210mm !important;
+    height: 297mm !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    background: #ffffff !important;
+    overflow: hidden !important;
+    z-index: 99999 !important;
+    border: none !important;
+  }
+
+  /* 3. Ensure all children are visible */
+  #resume-pdf * {
+    visibility: visible !important;
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
+    box-shadow: none !important;
+    text-shadow: none !important;
+  }
+
+  /* 4. Reset the CSS scale transform and margins */
+  #resume-pdf .resume-inner {
+    transform: none !important;
+    width: 100% !important;
+    height: 100% !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    display: block !important;
+  }
+
+  /* 5. Clickable links MUST remain visible and styled */
+  #resume-pdf a {
+    color: inherit !important;
+    text-decoration: underline !important;
+  }
+
+  @page {
+    size: A4 portrait !important;
+    margin: 0 !important;
+  }
+}
+
+
+/* ── Mobile Overflow Safety ─────────────────────────── */
+html, body {
+  overflow-x: hidden;
+  max-width: 100vw;
+}
+
+/* Extra bottom space on mobile so content doesn't hide behind the fixed bottom bar */
+@media (max-width: 1023px) {
+  .pb-mobile-bar {
+    padding-bottom: 80px;
+  }
+}
