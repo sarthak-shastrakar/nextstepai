@@ -56,18 +56,18 @@ export default function HeaderAuth() {
     const res = await getNotifications();
     if (res.success) {
       const newNotifs = res.notifications;
-      
+
       newNotifs.forEach(n => {
         // Only process notifications we haven't seen yet in this session
         if (!notifiedIdsRef.current.has(n._id)) {
-           notifiedIdsRef.current.add(n._id);
-           
-           // Show toast only if notification is recent (created within last 15 seconds)
-           // This handles redirects where OneSignal foreground event might miss the push
-           const isRecent = (Date.now() - new Date(n.createdAt).getTime()) < 15000;
-           if (isRecent) {
-             showPremiumToast(n.title, n.message);
-           }
+          notifiedIdsRef.current.add(n._id);
+
+          // Show toast only if notification is recent (created within last 15 seconds)
+          // This handles redirects where OneSignal foreground event might miss the push
+          const isRecent = (Date.now() - new Date(n.createdAt).getTime()) < 15000;
+          if (isRecent) {
+            showPremiumToast(n.title, n.message);
+          }
         }
       });
 
@@ -80,11 +80,11 @@ export default function HeaderAuth() {
     if (isLoggedIn) {
       fetchNotifications();
       const interval = setInterval(fetchNotifications, 30000);
-      
+
       if (typeof window !== "undefined") {
         window.OneSignalDeferred = window.OneSignalDeferred || [];
-        window.OneSignalDeferred.push(async function(OneSignal) {
-          OneSignal.Notifications.addEventListener('foregroundWillDisplay', function(event) {
+        window.OneSignalDeferred.push(async function (OneSignal) {
+          OneSignal.Notifications.addEventListener('foregroundWillDisplay', function (event) {
             event.preventDefault(); // Prevent native browser push if supported, show in-app toast instead
             const notif = event.notification;
             showPremiumToast(notif.title, notif.body);
@@ -93,7 +93,7 @@ export default function HeaderAuth() {
           });
         });
       }
-      
+
       return () => clearInterval(interval);
     }
   }, [isLoggedIn]);
@@ -140,7 +140,7 @@ export default function HeaderAuth() {
     // Optimistic update
     const previousNotifications = [...notifications];
     setNotifications(prev => prev.filter(n => n._id !== notificationId));
-    
+
     try {
       const res = await deleteNotification(notificationId);
       if (!res.success) {
@@ -219,7 +219,7 @@ export default function HeaderAuth() {
           <>
             {/* Notification Bell Dropdown */}
             <div className="relative nav-dropdown z-50">
-              <button 
+              <button
                 onClick={(e) => { e.stopPropagation(); setIsNotificationsOpen(!isNotificationsOpen); setIsAvatarOpen(false); setIsCareerBoostOpen(false); }}
                 className={cn("relative p-2 rounded-full transition-colors cursor-pointer", isNotificationsOpen ? "bg-indigo-100 text-indigo-700" : "text-slate-400 hover:text-indigo-600 hover:bg-indigo-50")}
               >
@@ -240,7 +240,7 @@ export default function HeaderAuth() {
                         </button>
                       )}
                     </div>
-                    
+
                     <div className="max-h-[350px] overflow-y-auto hide-scrollbar">
                       {notifications.length === 0 ? (
                         <div className="p-6 text-center text-slate-400">
@@ -250,8 +250,8 @@ export default function HeaderAuth() {
                       ) : (
                         <div className="flex flex-col">
                           {notifications.map((notif) => (
-                            <div 
-                              key={notif._id} 
+                            <div
+                              key={notif._id}
                               onClick={() => handleNotificationClick(notif)}
                               className={cn("p-4 border-b border-slate-50 cursor-pointer hover:bg-slate-50 transition-colors flex items-start gap-3 relative", !notif.isRead && "bg-indigo-50/30")}
                             >
@@ -263,7 +263,7 @@ export default function HeaderAuth() {
                                 <p className={cn("text-sm", !notif.isRead ? "font-extrabold text-slate-900" : "font-semibold text-slate-700")}>{notif.title}</p>
                                 <p className="text-xs text-slate-500 mt-0.5 leading-snug">{notif.message}</p>
                                 <p className="text-[10px] font-bold text-slate-400 mt-2 uppercase tracking-widest">{formatDistanceToNow(new Date(notif.createdAt), { addSuffix: true })}</p>
-                                <button 
+                                <button
                                   onClick={(e) => handleDeleteNotification(e, notif._id)}
                                   className="absolute top-0 right-0 p-1 text-slate-400 hover:text-red-500 hover:bg-red-50 rounded-md transition-colors"
                                   title="Delete notification"

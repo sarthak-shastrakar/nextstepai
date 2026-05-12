@@ -233,22 +233,18 @@ const Quiz = () => {
                     </div>
 
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-10">
-                        {/* Tech Stack */}
+                        {/* Tech Stack — Auto-Detect from Profile */}
                         <div className="space-y-4">
-                            <Label className="text-[10px] font-black uppercase tracking-widest text-primary ml-1">Domain Tech Stack</Label>
-                            <select 
-                                value={config.techStack}
-                                onChange={(e) => setConfig({...config, techStack: e.target.value})}
-                                className="w-full bg-white/50 border-2 border-border/40 rounded-2xl p-5 font-black text-sm focus:border-primary/40 focus:ring-4 focus:ring-primary/5 transition-all outline-none appearance-none"
-                            >
-                                <option value="">Auto-Detect from Profile</option>
-                                <option value="Frontend (React/Next.js)">Frontend (React/Next.js)</option>
-                                <option value="Backend (Node.js/Go)">Backend (Node.js/Go)</option>
-                                <option value="Fullstack (MERN/T3)">Fullstack (MERN/T3)</option>
-                                <option value="DevOps & Cloud">DevOps & Cloud</option>
-                                <option value="Data Science/AI">Data Science/AI</option>
-                                <option value="Mobile (React Native/Flutter)">Mobile (React Native/Flutter)</option>
-                            </select>
+                            <Label className="text-[10px] font-black uppercase tracking-widest text-primary ml-1">Domain / Tech Stack</Label>
+                            <div className="w-full bg-primary/5 border-2 border-primary/20 rounded-2xl p-5 flex items-center gap-3">
+                                <div className="h-8 w-8 rounded-xl bg-primary/10 flex items-center justify-center shrink-0">
+                                    <Brain className="h-4 w-4 text-primary" />
+                                </div>
+                                <div>
+                                    <p className="text-sm font-black text-primary">Auto-Detect from Profile</p>
+                                    <p className="text-[10px] text-muted-foreground font-medium mt-0.5">Questions tailored to your industry & skills</p>
+                                </div>
+                            </div>
                         </div>
 
                         {/* Level */}

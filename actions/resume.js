@@ -100,22 +100,55 @@ export async function improveWithAI({ current, type }) {
   const user = await checkUser();
   if (!user) throw new Error("User not found");
 
+  const DAILY_LIMIT = 2;
+  const today = new Date().toISOString().slice(0, 10); // "YYYY-MM-DD"
+
+  await dbConnect();
+
+  // ── Check daily usage ────────────────────────────────────────────
+  const resumeDoc = await Resume.findOne(
+    { userId: user.id },
+    { aiImproveCount: 1, aiImproveDate: 1 }
+  ).lean();
+
+  const sameDay   = resumeDoc?.aiImproveDate === today;
+  const usedToday = sameDay ? (resumeDoc.aiImproveCount || 0) : 0;
+
+  if (usedToday >= DAILY_LIMIT) {
+    // Time until midnight (IST = UTC+5:30, but we use server local — tell user in hours)
+    const now      = new Date();
+    const tomorrow = new Date(now);
+    tomorrow.setDate(tomorrow.getDate() + 1);
+    tomorrow.setHours(0, 0, 0, 0);
+    const hoursLeft = Math.ceil((tomorrow - now) / (1000 * 60 * 60));
+    throw new Error(
+      `Daily AI limit reached (${DAILY_LIMIT} uses/day). Resets in ${hoursLeft}h.`
+    );
+  }
+
   const prompts = {
-    summary: "Hook + top skills. Max 50 words.",
+    summary:    "Hook + top skills. Max 50 words.",
     experience: "Action verbs + metrics. Max 60 words.",
-    project: "Problem + Stack + Outcome. Max 60 words.",
+    project:    "Problem + Stack + Outcome. Max 60 words.",
   };
 
   const task = `Resume Expert: Polish this "${type}". Rule: ${prompts[type] || "Concise."} No intro.`;
   const data = `Industry: ${user.industry}, Text: "${current}"`;
 
   try {
-    const response = await runAI(task, data, {
-      maxTokens: 200,
-      isText: true,
-    });
+    const response = await runAI(task, data, { maxTokens: 200, isText: true });
+
+    // ── Increment usage counter ──────────────────────────────────
+    await Resume.findOneAndUpdate(
+      { userId: user.id },
+      { aiImproveDate: today, aiImproveCount: sameDay ? usedToday + 1 : 1 },
+      { upsert: true }
+    );
+
     return response;
   } catch (error) {
+    // Re-throw limit errors as-is; wrap AI errors
+    if (error.message?.startsWith("Daily AI limit")) throw error;
     console.error("Error improving with AI:", error);
     throw new Error("Failed to improve content. Please try again.");
   }
@@ -124,6 +157,31 @@ export async function improveWithAI({ current, type }) {
 export async function getATSScore(resumeContent, targetRole = "Professional") {
   const user = await checkUser();
   if (!user) throw new Error("User not found");
+
+  const DAILY_LIMIT = 2;
+  const today = new Date().toISOString().slice(0, 10);
+
+  await dbConnect();
+
+  // ── Check daily ATS usage ────────────────────────────────────────
+  const resumeDoc = await Resume.findOne(
+    { userId: user.id },
+    { aiAtsCount: 1, aiAtsDate: 1 }
+  ).lean();
+
+  const sameDay   = resumeDoc?.aiAtsDate === today;
+  const usedToday = sameDay ? (resumeDoc.aiAtsCount || 0) : 0;
+
+  if (usedToday >= DAILY_LIMIT) {
+    const now      = new Date();
+    const tomorrow = new Date(now);
+    tomorrow.setDate(tomorrow.getDate() + 1);
+    tomorrow.setHours(0, 0, 0, 0);
+    const hoursLeft = Math.ceil((tomorrow - now) / (1000 * 60 * 60));
+    throw new Error(
+      `Daily ATS limit reached (${DAILY_LIMIT} checks/day). Resets in ${hoursLeft}h.`
+    );
+  }
 
   const task = `Analyze resume for "${targetRole}" in ${user.industry}. 
   Return JSON:
@@ -137,8 +195,18 @@ export async function getATSScore(resumeContent, targetRole = "Professional") {
   const data = `Resume: ${resumeContent}`;
 
   try {
-    return await runAI(task, data, { maxTokens: 600 });
+    const result = await runAI(task, data, { maxTokens: 600 });
+
+    // ── Increment ATS usage counter ─────────────────────────────
+    await Resume.findOneAndUpdate(
+      { userId: user.id },
+      { aiAtsDate: today, aiAtsCount: sameDay ? usedToday + 1 : 1 },
+      { upsert: true }
+    );
+
+    return result;
   } catch (error) {
+    if (error.message?.startsWith("Daily ATS limit")) throw error;
     console.error("Error getting ATS score:", error);
     throw new Error("Analysis failed.");
   }

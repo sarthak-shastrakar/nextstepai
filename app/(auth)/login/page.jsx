@@ -343,6 +343,7 @@ function Login() {
         </div>
       </motion.div>
     </div>
+  );
 }
 
 export default function LoginPage() {

@@ -445,12 +445,6 @@ export async function completeProfile(formData) {
       { returnDocument: "after" }
     );
 
-    await sendPushNotification({
-      userId: updatedUser._id,
-      title: "Profile Completed 🚀",
-      message: `Great job, ${updatedUser.name.split(' ')[0]}! Your profile is now set up and ready to go.`,
-      url: "/resume"
-    });
 
     return {
       success: true,
@@ -566,7 +560,7 @@ export async function setProfilePassword(password, confirmPassword, skipped = fa
     }
 
     await dbConnect();
-    
+
     let updateData = { profileCompleted: true, updatedAt: new Date() };
 
     if (skipped) {
@@ -595,13 +589,13 @@ export async function setProfilePassword(password, confirmPassword, skipped = fa
 
     await User.findByIdAndUpdate(session.user.id, updateData);
 
-    // Send profile complete push notification (fire & forget)
+    // Send single onboarding-complete notification (fire & forget)
     sendPushNotification({
       userId: session.user.id,
-      title: "Account Secured 🛡️",
-      message: `Awesome, ${session.user?.name?.split(' ')[0] || 'User'}! Your password is set and your profile is fully secured.`,
-      url: "/"
-    }).catch(() => {});
+      title: "You're all set! 🎉",
+      message: `Welcome to CareerForge AI, ${session.user?.name?.split(' ')[0] || 'there'}! Your account is ready. Let's build your career!`,
+      url: "/dashboard"
+    }).catch(() => { });
 
     return { success: true, message: "Password set and profile completed!" };
   } catch (error) {

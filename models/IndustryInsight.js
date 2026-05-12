@@ -38,8 +38,9 @@ const IndustryInsightSchema = new mongoose.Schema(
     certifications: { type: [mongoose.Schema.Types.Mixed], default: [] },
 
     // ── Timestamps ────────────────────────────────────────────────
-    lastGeneratedAt: { type: Date, default: Date.now },
-    nextUpdate: { type: Date, required: true },
+    lastGeneratedAt:     { type: Date, default: Date.now },
+    nextUpdate:          { type: Date, required: true },
+    lastManualRefreshAt: { type: Date, default: null },  // tracks user-initiated refreshes
   },
   { timestamps: true }
 );

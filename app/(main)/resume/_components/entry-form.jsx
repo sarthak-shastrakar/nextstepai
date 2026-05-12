@@ -29,7 +29,8 @@ import {
   Building2, 
   Trash2,
   Calendar,
-  Award
+  Award,
+  Lock
 } from "lucide-react";
 import { improveWithAI } from "@/actions/resume";
 import { toast } from "sonner";
@@ -41,7 +42,7 @@ const formatDisplayDate = (dateString) => {
   return format(date, "MMM yyyy");
 };
 
-export function EntryForm({ type, entries, onChange }) {
+export function EntryForm({ type, entries, onChange, improveLeft = 2, onImproveUsed }) {
   const [isAdding, setIsAdding] = useState(false);
 
   const {
@@ -157,6 +158,7 @@ export function EntryForm({ type, entries, onChange }) {
   useEffect(() => {
     if (improvedContent && !isImproving) {
       setValue("description", improvedContent);
+      onImproveUsed?.();
       toast.success("Description improved successfully!");
     }
     if (improveError) {
@@ -169,6 +171,10 @@ export function EntryForm({ type, entries, onChange }) {
     const description = watch("description");
     if (!description) {
       toast.error("Please enter a description first");
+      return;
+    }
+    if (improveLeft === 0) {
+      toast.error("Daily AI limit reached (2/day). Try again tomorrow.");
       return;
     }
 
@@ -335,19 +341,34 @@ export function EntryForm({ type, entries, onChange }) {
               type="button"
               variant="outline"
               size="sm"
-              className="rounded-full bg-primary/5 text-primary border-primary/20 hover:bg-primary/10 transition-all font-bold group"
+              className={`rounded-full transition-all font-bold group ${
+                improveLeft === 0
+                  ? "bg-slate-100 text-slate-400 border-slate-200 cursor-not-allowed"
+                  : "bg-primary/5 text-primary border-primary/20 hover:bg-primary/10"
+              }`}
               onClick={handleImproveDescription}
-              disabled={isImproving || !watch("description")}
+              disabled={isImproving || !watch("description") || improveLeft === 0}
             >
               {isImproving ? (
                 <>
                   <Loader2 className="h-3 w-3 mr-2 animate-spin" />
                   AI Refining...
                 </>
+              ) : improveLeft === 0 ? (
+                <>
+                  <Lock className="h-3 w-3 mr-2" />
+                  AI Limit Reached
+                  <span className="ml-1.5 text-[9px] font-black bg-slate-200 text-slate-500 rounded-full px-1.5 py-0.5">
+                    0/2
+                  </span>
+                </>
               ) : (
                 <>
                   <Sparkles className="h-3 w-3 mr-2 text-primary group-hover:animate-pulse" />
                   AI Polish
+                  <span className="ml-1.5 text-[9px] font-black bg-primary/20 text-primary rounded-full px-1.5 py-0.5">
+                    {improveLeft}/2
+                  </span>
                 </>
               )}
             </Button>

@@ -48,6 +48,14 @@ const ResumeSchema = new mongoose.Schema(
       },
     ],
     content: { type: String }, // Kept for legacy data and manual markdown edits
+
+    // ── AI Improve daily rate-limit ───────────────────────────────
+    aiImproveCount: { type: Number, default: 0 },  // uses today
+    aiImproveDate:  { type: String, default: "" },  // "YYYY-MM-DD"
+
+    // ── ATS Check daily rate-limit ────────────────────────────────
+    aiAtsCount: { type: Number, default: 0 },       // ATS checks today
+    aiAtsDate:  { type: String, default: "" },       // "YYYY-MM-DD"
   },
   { timestamps: true }
 );

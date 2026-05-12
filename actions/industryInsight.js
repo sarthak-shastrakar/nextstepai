@@ -140,27 +140,64 @@ export async function getIndustryInsights(forceRefresh = false) {
   if (!user.industry)
     throw new Error("Please complete your profile to view industry insights.");
 
-  const THIRTY_DAYS = 30 * 24 * 60 * 60 * 1000;
+  const SIX_MONTHS    = 180 * 24 * 60 * 60 * 1000;
+  const THIRTY_DAYS   =  30 * 24 * 60 * 60 * 1000; // manual refresh lock window
   const userId = user._id;
 
   // ── Step 1: Check MongoDB cache ──────────────────────────────────────────
   let existing = await IndustryInsight.findOne({ userId }).lean();
 
+  // ── Helper: build lock info from existing record ──────────────────────
+  const getLockInfo = (doc) => {
+    if (!doc?.lastManualRefreshAt) return { manualRefreshLocked: false, manualRefreshUnlockAt: null };
+    const elapsed = Date.now() - new Date(doc.lastManualRefreshAt).getTime();
+    const locked  = elapsed < THIRTY_DAYS;
+    return {
+      manualRefreshLocked:  locked,
+      manualRefreshUnlockAt: locked
+        ? new Date(new Date(doc.lastManualRefreshAt).getTime() + THIRTY_DAYS)
+        : null,
+    };
+  };
+
+  // ── Manual-refresh lock guard ─────────────────────────────────────────
+  if (forceRefresh && existing) {
+    const { manualRefreshLocked, manualRefreshUnlockAt } = getLockInfo(existing);
+    if (manualRefreshLocked) {
+      // Return cached data with lock info — do NOT regenerate
+      const readinessScore = calcReadinessScore(user, existing.topSkills);
+      const serialized = JSON.parse(JSON.stringify(existing));
+      return {
+        ...serialized,
+        readinessScore,
+        userSkills:    user.skills || [],
+        userExperience: user.experience,
+        fromCache: true,
+        manualRefreshLocked: true,
+        manualRefreshUnlockAt,
+        daysAgo: Math.floor(
+          (Date.now() - new Date(existing.lastGeneratedAt).getTime()) / (1000 * 60 * 60 * 24)
+        ),
+      };
+    }
+  }
+
   const isExpired =
     !existing ||
     existing.industry !== user.industry ||
-    Date.now() - new Date(existing.lastGeneratedAt).getTime() > THIRTY_DAYS;
+    Date.now() - new Date(existing.lastGeneratedAt).getTime() > SIX_MONTHS;
 
   if (existing && !isExpired && !forceRefresh) {
-    // ── Step 2: Serve from cache ─────────────────────────────────────────
+    // ── Step 2: Serve from cache ─────────────────────────────────────
     const readinessScore = calcReadinessScore(user, existing.topSkills);
     const serialized = JSON.parse(JSON.stringify(existing));
     return {
       ...serialized,
       readinessScore,
-      userSkills: user.skills || [],
+      userSkills:    user.skills || [],
       userExperience: user.experience,
       fromCache: true,
+      ...getLockInfo(existing),
       daysAgo: Math.floor(
         (Date.now() - new Date(existing.lastGeneratedAt).getTime()) / (1000 * 60 * 60 * 24)
       ),
@@ -182,10 +219,11 @@ export async function getIndustryInsights(forceRefresh = false) {
       return {
         ...serialized,
         readinessScore,
-        userSkills: user.skills || [],
+        userSkills:    user.skills || [],
         userExperience: user.experience,
         fromCache: true,
         aiError: true,
+        ...getLockInfo(existing),
         daysAgo: Math.floor(
           (Date.now() - new Date(existing.lastGeneratedAt).getTime()) /
             (1000 * 60 * 60 * 24)
@@ -195,7 +233,10 @@ export async function getIndustryInsights(forceRefresh = false) {
     throw err;
   }
 
-  const nextUpdate = new Date(Date.now() + THIRTY_DAYS);
+  const nextUpdate = new Date(Date.now() + SIX_MONTHS);
+
+  // If this is a manual refresh, stamp the time
+  const manualRefreshStamp = forceRefresh ? { lastManualRefreshAt: new Date() } : {};
 
   // Normalize hiringTrends to sum to 100
   if (aiData.hiringTrends) {
@@ -229,6 +270,7 @@ export async function getIndustryInsights(forceRefresh = false) {
     certifications: aiData.certifications || [],
     lastGeneratedAt: new Date(),
     nextUpdate,
+    ...manualRefreshStamp,
   };
 
   // ── Step 4: Save to MongoDB (upsert) ────────────────────────────────────
@@ -244,9 +286,11 @@ export async function getIndustryInsights(forceRefresh = false) {
   return {
     ...serialized,
     readinessScore,
-    userSkills: user.skills || [],
+    userSkills:    user.skills || [],
     userExperience: user.experience,
     fromCache: false,
+    manualRefreshLocked: false,
+    manualRefreshUnlockAt: forceRefresh ? new Date(Date.now() + THIRTY_DAYS) : null,
     daysAgo: 0,
   };
 }

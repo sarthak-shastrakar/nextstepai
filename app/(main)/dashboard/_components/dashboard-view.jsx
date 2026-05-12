@@ -3,7 +3,7 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { motion } from "framer-motion";
-import { RefreshCcw, Loader2, Brain, Clock, Sparkles, AlertTriangle } from "lucide-react";
+import { RefreshCcw, Loader2, Brain, Clock, Sparkles, AlertTriangle, Lock } from "lucide-react";
 import { formatDistanceToNow, format } from "date-fns";
 import { toast } from "sonner";
 import { getIndustryInsights } from "@/actions/industryInsight";
@@ -65,11 +65,23 @@ export default function DashboardView({ insights: initialInsights, error: initia
 
   // ── Sync handler ─────────────────────────────────────────────
   const handleSync = async () => {
+    // Check lock
+    if (insights?.manualRefreshLocked) {
+      const unlockDate = insights.manualRefreshUnlockAt
+        ? format(new Date(insights.manualRefreshUnlockAt), "MMM dd, yyyy")
+        : "next month";
+      toast.error(`Refresh locked until ${unlockDate}. You can only refresh once per month.`);
+      return;
+    }
     setSyncing(true);
     try {
       const fresh = await getIndustryInsights(true);
+      if (fresh?.manualRefreshLocked) {
+        toast.warning("Refresh already used this month — showing latest data.");
+      } else {
+        toast.success("Industry insights refreshed!");
+      }
       setInsights(fresh);
-      toast.success("Industry insights refreshed!");
     } catch (err) {
       toast.error("Sync failed — " + err.message);
     } finally {
@@ -137,16 +149,32 @@ export default function DashboardView({ insights: initialInsights, error: initia
           </div>
           <div className="flex-1 space-y-1">
             <p className="text-[10px] font-black uppercase text-slate-400 tracking-widest">Next Auto-Sync</p>
-            <p className="text-xs font-bold">Monthly Schedule Active</p>
+            <p className="text-xs font-bold">6-Month Auto-Refresh</p>
             <div className="h-1 w-full bg-slate-100 rounded-full overflow-hidden">
               <div className="h-full w-3/5 bg-gradient-to-r from-primary to-primary/40 rounded-full" />
             </div>
           </div>
-          <button onClick={handleSync} disabled={syncing}
-            className="flex items-center gap-1.5 text-xs font-bold px-3 py-2 rounded-xl bg-slate-900 text-white hover:bg-slate-700 transition-all disabled:opacity-50 flex-shrink-0">
-            {syncing ? <Loader2 className="h-3.5 w-3.5 animate-spin" /> : <RefreshCcw className="h-3.5 w-3.5" />}
-            {syncing ? "Syncing…" : "Refresh"}
-          </button>
+          {/* Refresh button — locked or active */}
+          {insights?.manualRefreshLocked ? (
+            <div className="flex flex-col items-center gap-0.5 flex-shrink-0">
+              <div className="flex items-center gap-1.5 text-xs font-bold px-3 py-2 rounded-xl bg-slate-100 text-slate-400 border border-slate-200 cursor-not-allowed">
+                <Lock className="h-3.5 w-3.5" />
+                Locked
+              </div>
+              <p className="text-[9px] text-slate-400 font-medium text-center leading-tight">
+                Unlocks{" "}
+                {insights.manualRefreshUnlockAt
+                  ? format(new Date(insights.manualRefreshUnlockAt), "MMM dd")
+                  : "next month"}
+              </p>
+            </div>
+          ) : (
+            <button onClick={handleSync} disabled={syncing}
+              className="flex items-center gap-1.5 text-xs font-bold px-3 py-2 rounded-xl bg-slate-900 text-white hover:bg-slate-700 transition-all disabled:opacity-50 flex-shrink-0">
+              {syncing ? <Loader2 className="h-3.5 w-3.5 animate-spin" /> : <RefreshCcw className="h-3.5 w-3.5" />}
+              {syncing ? "Syncing…" : "Refresh"}
+            </button>
+          )}
         </div>
       </motion.div>
 

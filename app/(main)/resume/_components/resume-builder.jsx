@@ -31,7 +31,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { setActiveTemplate, setPreviewModalOpen, setSelectedTemplatePreview } from "@/lib/resumeSlice";
 import { exportToDocx, exportToText, exportToPDF } from "@/lib/export-utils";
 
-export default function ResumeBuilder({ initialContent, userIndustry, user: fullUser }) {
+export default function ResumeBuilder({ initialContent, userIndustry, user: fullUser, initialAIUsage }) {
   const dispatch = useDispatch();
   const activeTemplate = useSelector(state => state.resume.activeTemplate);
   const previewModalOpen = useSelector(state => state.resume.previewModalOpen);
@@ -48,6 +48,14 @@ export default function ResumeBuilder({ initialContent, userIndustry, user: full
   const [targetRole, setTargetRole] = useState("");
   const [isGeneratingSummary, setIsGeneratingSummary] = useState(false);
   const [showTemplateDrawer, setShowTemplateDrawer] = useState(false);
+
+  // ── AI daily usage counters ──────────────────────────────────────
+  const DAILY_LIMIT = 2;
+  const [improveUsed, setImproveUsed] = useState(initialAIUsage?.improveUsed || 0);
+  const [atsUsed,     setAtsUsed]     = useState(initialAIUsage?.atsUsed     || 0);
+  const improveLeft = Math.max(0, DAILY_LIMIT - improveUsed);
+  const atsLeft     = Math.max(0, DAILY_LIMIT - atsUsed);
+  const onImproveUsed = () => setImproveUsed((p) => Math.min(p + 1, DAILY_LIMIT));
 
   const handleTabChange = (val) => setActiveTab(val);
 
@@ -216,6 +224,10 @@ export default function ResumeBuilder({ initialContent, userIndustry, user: full
   };
 
   const handleCheckATS = async () => {
+    if (atsLeft === 0) {
+      toast.error("Daily ATS limit reached (2/day). Try again tomorrow.");
+      return;
+    }
     if (completion < 60) {
       toast.error("Resume Incomplete", {
         description: `Your resume is only ${completion}% complete. Please fill at least 60% before running ATS analysis.`,
@@ -227,6 +239,7 @@ export default function ResumeBuilder({ initialContent, userIndustry, user: full
     try {
       const analysis = await getATSScore(getCombinedContent() || previewContent, targetRole || "General Professional");
       setAtsAnalysis(analysis);
+      setAtsUsed((p) => Math.min(p + 1, DAILY_LIMIT));
       toast.success("ATS Analysis Complete", {
         description: targetRole ? `Optimized for ${targetRole}` : "General analysis completed",
       });
@@ -237,7 +250,7 @@ export default function ResumeBuilder({ initialContent, userIndustry, user: full
         resultsEl?.scrollIntoView({ behavior: "smooth" });
       }, 500);
     } catch (error) {
-      toast.error("ATS analysis failed. Please try again.");
+      toast.error(error.message || "ATS analysis failed. Please try again.");
     } finally {
       setIsAnalyzing(false);
     }
@@ -326,12 +339,21 @@ export default function ResumeBuilder({ initialContent, userIndustry, user: full
           </div>
 
           <motion.button
-            whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.97 }}
-            onClick={handleCheckATS} disabled={isAnalyzing}
-            className="flex items-center gap-1.5 text-xs font-bold px-3 py-2 rounded-xl border border-primary/20 bg-primary/20 text-primary hover:bg-primary hover:text-white transition-all shadow-sm disabled:opacity-50"
+            whileHover={{ scale: atsLeft > 0 ? 1.02 : 1 }} whileTap={{ scale: atsLeft > 0 ? 0.97 : 1 }}
+            onClick={handleCheckATS} disabled={isAnalyzing || atsLeft === 0}
+            className={`flex items-center gap-1.5 text-xs font-bold px-3 py-2 rounded-xl border transition-all shadow-sm ${
+              atsLeft === 0
+                ? "border-slate-200 bg-slate-100 text-slate-400 cursor-not-allowed"
+                : "border-primary/20 bg-primary/20 text-primary hover:bg-primary hover:text-white disabled:opacity-50"
+            }`}
           >
             {isAnalyzing ? <Loader2 className="h-3.5 w-3.5 animate-spin" /> : <Sparkles className="h-3.5 w-3.5" />}
             ATS Check
+            <span className={`text-[9px] font-black px-1.5 py-0.5 rounded-full ${
+              atsLeft === 0 ? "bg-slate-200 text-slate-500" : "bg-white/40 text-current border border-current/20"
+            }`}>
+              {atsLeft}/2
+            </span>
           </motion.button>
 
           <motion.button
@@ -598,7 +620,7 @@ export default function ResumeBuilder({ initialContent, userIndustry, user: full
                 <motion.div ref={sectionRefs.summary} initial={{ opacity: 0, y: 16 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.3 }} className="scroll-mt-28">
                   <SectionLabel icon={<Brain className="h-4 w-4" />} title="Professional Summary" tip={sectionTips.summary} />
                   <div className="bg-white border border-slate-100 rounded-2xl p-5 shadow-sm">
-                    <Controller name="summary" control={control} render={({ field }) => <SummaryForm value={field.value} onChange={field.onChange} />} />
+                    <Controller name="summary" control={control} render={({ field }) => <SummaryForm value={field.value} onChange={field.onChange} improveLeft={improveLeft} onImproveUsed={onImproveUsed} />} />
                   </div>
                 </motion.div>
 
@@ -613,35 +635,35 @@ export default function ResumeBuilder({ initialContent, userIndustry, user: full
                 <motion.div ref={sectionRefs.experience} initial={{ opacity: 0, y: 16 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.3 }} className="scroll-mt-28">
                   <SectionLabel icon={<Briefcase className="h-4 w-4" />} title="Work Experience" tip={sectionTips.experience} />
                   <div className="bg-white border border-slate-100 rounded-2xl p-5 shadow-sm">
-                    <Controller name="experience" control={control} render={({ field }) => <EntryForm type="Experience" entries={field.value} onChange={field.onChange} />} />
+                    <Controller name="experience" control={control} render={({ field }) => <EntryForm type="Experience" entries={field.value} onChange={field.onChange} improveLeft={improveLeft} onImproveUsed={onImproveUsed} />} />
                   </div>
                 </motion.div>
 
                 <motion.div ref={sectionRefs.education} initial={{ opacity: 0, y: 16 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.3 }} className="scroll-mt-28">
                   <SectionLabel icon={<GraduationCap className="h-4 w-4" />} title="Education" tip={sectionTips.education} />
                   <div className="bg-white border border-slate-100 rounded-2xl p-5 shadow-sm">
-                    <Controller name="education" control={control} render={({ field }) => <EntryForm type="Education" entries={field.value} onChange={field.onChange} />} />
+                    <Controller name="education" control={control} render={({ field }) => <EntryForm type="Education" entries={field.value} onChange={field.onChange} improveLeft={improveLeft} onImproveUsed={onImproveUsed} />} />
                   </div>
                 </motion.div>
 
                 <motion.div ref={sectionRefs.projects} initial={{ opacity: 0, y: 16 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.3 }} className="scroll-mt-28">
                   <SectionLabel icon={<Award className="h-4 w-4" />} title="Projects" tip={sectionTips.projects} />
                   <div className="bg-white border border-slate-100 rounded-2xl p-5 shadow-sm">
-                    <Controller name="projects" control={control} render={({ field }) => <EntryForm type="Project" entries={field.value} onChange={field.onChange} />} />
+                    <Controller name="projects" control={control} render={({ field }) => <EntryForm type="Project" entries={field.value} onChange={field.onChange} improveLeft={improveLeft} onImproveUsed={onImproveUsed} />} />
                   </div>
                 </motion.div>
 
                 <motion.div ref={sectionRefs.certifications} initial={{ opacity: 0, y: 16 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.3 }} className="scroll-mt-28">
                   <SectionLabel icon={<Award className="h-4 w-4" />} title="Certifications" tip={sectionTips.certifications} />
                   <div className="bg-white border border-slate-100 rounded-2xl p-5 shadow-sm">
-                    <Controller name="certifications" control={control} render={({ field }) => <EntryForm type="Certifications" entries={field.value} onChange={field.onChange} />} />
+                    <Controller name="certifications" control={control} render={({ field }) => <EntryForm type="Certifications" entries={field.value} onChange={field.onChange} improveLeft={improveLeft} onImproveUsed={onImproveUsed} />} />
                   </div>
                 </motion.div>
 
                 <motion.div ref={sectionRefs.awards} initial={{ opacity: 0, y: 16 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.3 }} className="scroll-mt-28">
                   <SectionLabel icon={<Sparkles className="h-4 w-4" />} title="Achievements & Awards" tip={sectionTips.awards} />
                   <div className="bg-white border border-slate-100 rounded-2xl p-5 shadow-sm">
-                    <Controller name="awards" control={control} render={({ field }) => <EntryForm type="Awards" entries={field.value} onChange={field.onChange} />} />
+                    <Controller name="awards" control={control} render={({ field }) => <EntryForm type="Awards" entries={field.value} onChange={field.onChange} improveLeft={improveLeft} onImproveUsed={onImproveUsed} />} />
                   </div>
                 </motion.div>
 

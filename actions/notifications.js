@@ -3,6 +3,7 @@
 import { auth } from "@/lib/auth";
 import dbConnect from "@/lib/mongoose";
 import Notification from "@/models/Notification";
+import mongoose from "mongoose";
 
 export async function getNotifications() {
   try {
@@ -64,8 +65,6 @@ export async function markAllAsRead() {
     return { success: false };
   }
 }
-
-import mongoose from "mongoose";
 
 export async function deleteNotification(notificationId) {
   try {
