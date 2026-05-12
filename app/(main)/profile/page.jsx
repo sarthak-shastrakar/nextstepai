@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useEffect, useRef, useTransition } from "react";
+import React, { useState, useEffect, useRef, useTransition, Suspense } from "react";
 import { useSession } from "next-auth/react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
@@ -118,7 +118,7 @@ const SaveBtn = ({ isPending, setEditSection }) => (
   </div>
 );
 
-export default function ProfilePage() {
+function ProfileContent() {
   const { data: session, update } = useSession();
   const searchParams = useSearchParams();
   const initialTab = searchParams.get("tab") || "personal";
@@ -710,5 +710,19 @@ export default function ProfilePage() {
         </div>
       </div>
     </div>
+  );
+}
+
+export default function ProfilePage() {
+  return (
+    <Suspense
+      fallback={
+        <div className="min-h-screen flex items-center justify-center bg-slate-50">
+          <Loader2 className="h-8 w-8 text-indigo-500 animate-spin" />
+        </div>
+      }
+    >
+      <ProfileContent />
+    </Suspense>
   );
 }
