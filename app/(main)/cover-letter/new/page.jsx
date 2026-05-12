@@ -2,10 +2,13 @@ import Link from "next/link";
 import { ArrowLeft } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import CoverLetterGenerator from "../_components/cover-letter-generator";
+import { getCoverLetterDailyUsage } from "@/actions/cover-letter";
 
 export const dynamic = "force-dynamic";
 
-export default function NewCoverLetterPage() {
+export default async function NewCoverLetterPage() {
+  const dailyUsage = await getCoverLetterDailyUsage();
+
   return (
     <div className="container mx-auto py-6">
       <div className="flex flex-col space-y-2">
@@ -25,7 +28,7 @@ export default function NewCoverLetterPage() {
           </p>
         </div>
       </div>
-      <CoverLetterGenerator />
+      <CoverLetterGenerator dailyUsage={dailyUsage} />
     </div>
   );
 }

@@ -17,6 +17,38 @@ function serialize(doc) {
 
 
 // ══════════════════════════════════════════════════════════════
+// 0. Daily Usage Helper
+// ══════════════════════════════════════════════════════════════
+const DAILY_CL_LIMIT = 3;
+
+function getTodayRange() {
+  const now = new Date();
+  const start = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+  const end = new Date(start);
+  end.setDate(end.getDate() + 1);
+  return { start, end };
+}
+
+export async function getCoverLetterDailyUsage() {
+  const session = await auth();
+  if (!session?.user?.id) return { used: 0, limit: DAILY_CL_LIMIT, remaining: DAILY_CL_LIMIT };
+
+  await dbConnect();
+  const { start, end } = getTodayRange();
+
+  const usedToday = await CoverLetter.countDocuments({
+    userId: session.user.id,
+    createdAt: { $gte: start, $lt: end },
+  });
+
+  return {
+    used: usedToday,
+    limit: DAILY_CL_LIMIT,
+    remaining: Math.max(0, DAILY_CL_LIMIT - usedToday),
+  };
+}
+
+// ══════════════════════════════════════════════════════════════
 // 1. Generate Cover Letter
 // ══════════════════════════════════════════════════════════════
 export async function GenerateCoverLetter(data) {
@@ -26,6 +58,24 @@ export async function GenerateCoverLetter(data) {
   await dbConnect();
   const user = await User.findById(session.user.id).lean();
   if (!user) throw new Error("User not found");
+
+  // ── Daily limit check ──────────────────────────────────────
+  const { start, end } = getTodayRange();
+  const usedToday = await CoverLetter.countDocuments({
+    userId: user._id,
+    createdAt: { $gte: start, $lt: end },
+  });
+
+  if (usedToday >= DAILY_CL_LIMIT) {
+    const now      = new Date();
+    const tomorrow = new Date(now);
+    tomorrow.setDate(tomorrow.getDate() + 1);
+    tomorrow.setHours(0, 0, 0, 0);
+    const hoursLeft = Math.ceil((tomorrow - now) / (1000 * 60 * 60));
+    throw new Error(
+      `Daily limit reached (${DAILY_CL_LIMIT} cover letters/day). Resets in ${hoursLeft}h.`
+    );
+  }
 
   const today = format(new Date(), "MMMM d, yyyy");
 
