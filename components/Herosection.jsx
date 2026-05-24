@@ -188,7 +188,7 @@ const Herosection = () => {
                       </div>
                       <div>
                         <p className="text-[10px] font-bold text-slate-400 uppercase tracking-wider">🎯 Resume Score</p>
-                        <p className="font-extrabold text-slate-800 text-sm">85% ATS Optimized</p>
+                        <p className="font-extrabold text-slate-800 text-sm">92% ATS Optimized</p>
                       </div>
                     </motion.div>
 
@@ -210,18 +210,19 @@ const Herosection = () => {
                       </div>
                     </motion.div>
 
-                    {/* Bottom Left: Resume Ready */}
+                    {/* Bottom Left: 95% Success Rate */}
                     <motion.div
                       animate={{ y: [0, 15, 0] }}
                       transition={{ duration: 3.5, repeat: Infinity, ease: "easeInOut", delay: 1 }}
                       style={{ x: floatX, y: floatY, translateZ: 60 }}
-                      className="absolute -bottom-8 -left-10 z-20 bg-white p-4 rounded-2xl shadow-2xl border border-slate-100"
+                      className="absolute -bottom-8 -left-10 z-20 bg-white p-4 rounded-2xl shadow-2xl border border-emerald-100 flex items-center gap-3"
                     >
-                      <p className="text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-2">📄 Download Formats</p>
-                      <div className="flex items-center gap-2">
-                        <span className="flex items-center gap-1 bg-red-50 text-red-600 border border-red-100 rounded-lg px-2.5 py-1 text-[11px] font-extrabold">PDF</span>
-                        <span className="flex items-center gap-1 bg-blue-50 text-blue-600 border border-blue-100 rounded-lg px-2.5 py-1 text-[11px] font-extrabold">DOCX</span>
-                        <span className="flex items-center gap-1 bg-slate-50 text-slate-600 border border-slate-100 rounded-lg px-2.5 py-1 text-[11px] font-extrabold">TXT</span>
+                      <div className="bg-emerald-100 p-2 rounded-full text-emerald-600">
+                        <Award className="w-4 h-4" />
+                      </div>
+                      <div>
+                        <p className="text-[10px] font-bold text-slate-400 uppercase tracking-wider">🏆 Success Rate</p>
+                        <p className="font-extrabold text-slate-800 text-sm">95% Success Rate</p>
                       </div>
                     </motion.div>
 

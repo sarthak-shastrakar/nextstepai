@@ -65,12 +65,6 @@ function TopCompanies({ companies }) {
             <p className="text-xs font-bold truncate">{c.name}</p>
             <p className="text-[10px] text-slate-500 truncate">{c.role}</p>
           </div>
-          <div className="flex items-center gap-1 text-[9px] text-slate-400 flex-shrink-0">
-            <MapPin className="h-3 w-3" />{c.location?.split(",")[0]}
-          </div>
-          <span className="text-[9px] font-black text-emerald-600 bg-emerald-50 border border-emerald-100 rounded-full px-1.5 py-0.5 flex-shrink-0">
-            {c.badge || "Hiring"}
-          </span>
         </motion.div>
       ))}
     </div>

@@ -145,7 +145,7 @@ export default function DashboardView({ insights: initialInsights, error: initia
             <p className="text-[9px] font-black uppercase text-primary leading-none">
               {nextUpd.split(" ")[0]}
             </p>
-            <p className="text-xl font-black leading-none">{nextUpd.split(" ")[1]}</p>
+            <p className="text-xl font-black leading-none">{nextUpd.split(" ")[1]?.replace(",", "") || ""}</p>
           </div>
           <div className="flex-1 space-y-1">
             <p className="text-[10px] font-black uppercase text-slate-400 tracking-widest">Next Auto-Sync</p>
