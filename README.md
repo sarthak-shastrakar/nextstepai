@@ -56,7 +56,7 @@ For a successful deployment on Vercel or any other platform, ensure the followin
 
 ### 1. Authentication (NextAuth)
 - `NEXTAUTH_SECRET`: A secure secret key (generate with `npx auth secret`).
-- `NEXTAUTH_URL`: Your application URL (e.g., `https://your-app.vercel.app`).
+- `NEXTAUTH_URL`: Your application URL (e.g., `https://levoraa.vercel.app/`).
 - `NEXT_PUBLIC_APP_URL`: Same as `NEXTAUTH_URL`.
 - `GOOGLE_CLIENT_ID`: Google OAuth Client ID.
 - `GOOGLE_CLIENT_SECRET`: Google OAuth Client Secret.
@@ -82,7 +82,7 @@ For a successful deployment on Vercel or any other platform, ensure the followin
 
 1.  **Push to GitHub**: Ensure your code is in a GitHub repository.
 2.  **Import to Vercel**:
-    - Go to [Vercel Dashboard](https://vercel.com/dashboard).
+    - Go to [Vercel Dashboard](https://levoraa.vercel.app/).
     - Click "Add New" -> "Project".
     - Import your repository.
 3.  **Configure Environment Variables**:
@@ -97,33 +97,6 @@ For a successful deployment on Vercel or any other platform, ensure the followin
 6.  **OAuth Redirects**:
     - Update your Google Cloud Console to include the new production callback URL: `https://your-app.vercel.app/api/auth/callback/google`.
 
----
-
-## 💻 Local Setup
-
-1.  **Clone the repository**:
-    ```bash
-    git clone <your-repo-url>
-    cd levora
-    ```
-2.  **Install dependencies**:
-    ```bash
-    npm install
-    ```
-3.  **Setup `.env`**:
-    Create a `.env` file and fill in the keys mentioned above.
-4.  **Run Dev Server**:
-    ```bash
-    npm run dev
-    ```
-5.  **Open**: [http://localhost:3000](http://localhost:3000)
-
----
-
-## 📜 Scripts
-
-- `npm run dev`: Starts the development server.
-- `npm run build`: Builds the production application.
 - `npm run start`: Starts the built application.
 - `npm run lint`: Checks for linting errors.
 
