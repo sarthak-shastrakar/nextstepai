@@ -120,14 +120,14 @@ const Herosection = () => {
             <h1 className="text-4xl sm:text-5xl md:text-7xl lg:text-8xl font-extrabold tracking-[-0.04em] leading-[1.1] md:leading-[0.95] text-slate-900">
               Elevate Your Career with
               <span className="block mt-2 md:mt-3 text-transparent bg-clip-text bg-gradient-to-r from-indigo-600 via-purple-600 to-indigo-600">
-                CareerForge
+                Levora
               </span>
             </h1>
 
             <p className="mx-auto max-w-[720px] text-base md:text-xl text-slate-500 leading-relaxed tracking-tight px-4 font-medium">
-              Master your industry with AI-driven insights, personalized resume
-              building, and real-world interview preparation tailored for the
-              modern professional.
+              Level up your career with AI — personalized resume
+              building, mock interview prep, and real-time industry insights
+              tailored for the modern professional.
             </p>
           </motion.div>
 
@@ -135,13 +135,14 @@ const Herosection = () => {
           <motion.div variants={itemVariants} className="flex justify-center w-full pt-2">
             <Link href="/dashboard" className="w-full sm:w-auto z-20 relative">
               <motion.div whileHover={{ scale: 1.04 }} whileTap={{ scale: 0.97 }}>
-                <Button
-                  size="lg"
-                  className="bg-indigo-600 hover:bg-indigo-700 text-white shadow-[0_8px_30px_rgba(79,70,229,0.3)] h-14 px-10 text-lg font-bold rounded-2xl cursor-pointer w-full sm:w-auto transition-all"
-                >
-                  Start Journey Free
-                  <ArrowRight className="ml-2.5 h-5 w-5" />
-                </Button>
+              {/* Issue #10: unified indigo CTA — matches all other primary buttons */}
+              <Button
+                size="lg"
+                className="btn-primary-cta h-14 px-10 text-lg font-bold rounded-2xl cursor-pointer w-full sm:w-auto"
+              >
+                Start Journey Free
+                <ArrowRight className="ml-2.5 h-5 w-5" />
+              </Button>
               </motion.div>
             </Link>
           </motion.div>
@@ -177,67 +178,73 @@ const Herosection = () => {
                 {!isMobile && (
                   <>
                     {/* Top Left: Resume Score */}
+                    {/* Issue #13: ring + deeper shadow make floating cards distinct from the static bg */}
                     <motion.div
                       animate={{ y: [0, -15, 0] }}
                       transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
                       style={{ x: floatX, y: floatY, translateZ: 50 }}
-                      className="absolute -top-12 -left-16 z-20 bg-white/90 backdrop-blur-md border border-slate-100 p-4 rounded-2xl shadow-xl flex items-center gap-4"
+                      className="absolute -top-12 -left-16 z-20 bg-white/95 backdrop-blur-md border border-slate-200 ring-2 ring-white/80 p-4 rounded-2xl shadow-[0_12px_40px_rgba(0,0,0,0.15)] flex items-center gap-4"
                     >
                       <div className="bg-emerald-100 p-2.5 rounded-full text-emerald-600">
                         <CheckCircle2 className="w-5 h-5" />
                       </div>
                       <div>
-                        <p className="text-[10px] font-bold text-slate-400 uppercase tracking-wider">🎯 Resume Score</p>
+                        {/* Issue #5/#7: sentence-case + min 12px (text-xs) for labels on floating badges */}
+                        <p className="text-xs font-bold text-slate-400 tracking-wider">🎯 Resume score</p>
                         <p className="font-extrabold text-slate-800 text-sm">92% ATS Optimized</p>
                       </div>
                     </motion.div>
 
                     {/* Top Right: AI Powered */}
+                    {/* Issue #13: stronger shadow + ring for the AI Powered floating badge */}
                     <motion.div
                       animate={{ x: [0, 15, 0] }}
                       transition={{ duration: 4, repeat: Infinity, ease: "easeInOut", delay: 0.5 }}
                       style={{ x: floatX, y: floatY, translateZ: 80 }}
-                      className="absolute -top-8 -right-12 z-20 bg-gradient-to-br from-indigo-600 to-purple-600 p-[1px] rounded-2xl shadow-[0_10px_30px_rgba(79,70,229,0.3)]"
+                      className="absolute -top-8 -right-12 z-20 bg-gradient-to-br from-indigo-600 to-purple-600 p-[1px] rounded-2xl shadow-[0_12px_40px_rgba(79,70,229,0.30)] ring-2 ring-white/70"
                     >
                       <div className="bg-white px-5 py-3 rounded-[15px] flex items-center gap-3">
                         <div className="text-purple-600">
                           <Zap className="w-5 h-5" />
                         </div>
                         <div>
-                          <p className="text-[10px] font-bold text-indigo-600 uppercase tracking-wider">⚡ AI Powered</p>
+                          <p className="text-xs font-bold text-indigo-600 tracking-wider">⚡ Ai powered</p>
                           <p className="font-extrabold text-slate-800 text-sm">AI Engine</p>
                         </div>
                       </div>
                     </motion.div>
 
                     {/* Bottom Left: 95% Success Rate */}
+                    {/* Issue #13: stronger shadow + ring for the Success Rate floating badge */}
                     <motion.div
                       animate={{ y: [0, 15, 0] }}
                       transition={{ duration: 3.5, repeat: Infinity, ease: "easeInOut", delay: 1 }}
                       style={{ x: floatX, y: floatY, translateZ: 60 }}
-                      className="absolute -bottom-8 -left-10 z-20 bg-white p-4 rounded-2xl shadow-2xl border border-emerald-100 flex items-center gap-3"
+                      className="absolute -bottom-8 -left-10 z-20 bg-white p-4 rounded-2xl shadow-[0_12px_40px_rgba(0,0,0,0.14)] ring-2 ring-white/80 border border-emerald-100 flex items-center gap-3"
                     >
                       <div className="bg-emerald-100 p-2 rounded-full text-emerald-600">
                         <Award className="w-4 h-4" />
                       </div>
                       <div>
-                        <p className="text-[10px] font-bold text-slate-400 uppercase tracking-wider">🏆 Success Rate</p>
+                        <p className="text-xs font-bold text-slate-400 tracking-wider">🏆 Success rate</p>
                         <p className="font-extrabold text-slate-800 text-sm">95% Success Rate</p>
                       </div>
                     </motion.div>
 
                     {/* Bottom Right: Interview Score */}
+                    {/* Issue #7 + #13: sentence-case label, 12px, stronger shadow + ring */}
                     <motion.div
                       animate={{ x: [0, -15, 0] }}
                       transition={{ duration: 4.5, repeat: Infinity, ease: "easeInOut", delay: 1.5 }}
                       style={{ x: floatX, y: floatY, translateZ: 90 }}
-                      className="absolute bottom-12 -right-16 z-30 bg-slate-900 p-4 rounded-2xl shadow-2xl border border-slate-800 flex items-center gap-4"
+                      className="absolute bottom-12 -right-16 z-30 bg-slate-900 p-4 rounded-2xl shadow-[0_12px_40px_rgba(0,0,0,0.25)] ring-2 ring-slate-700/60 border border-slate-800 flex items-center gap-4"
                     >
                       <div className="bg-yellow-500/20 p-2.5 rounded-full text-yellow-400">
                         <Star className="w-5 h-5 fill-yellow-400" />
                       </div>
                       <div>
-                        <p className="text-[10px] font-bold text-slate-400 uppercase tracking-wider">🎤 Interview Score</p>
+                        {/* Issue #7: was 10px uppercase — now sentence-case text-xs */}
+                        <p className="text-xs font-bold text-slate-400 tracking-wider">🎤 Interview score</p>
                         <p className="font-extrabold text-white text-sm">92% — Excellent!</p>
                       </div>
                     </motion.div>

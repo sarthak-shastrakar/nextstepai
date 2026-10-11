@@ -46,11 +46,13 @@ function StatCard({ label, value, sub, icon: Icon, accent }) {
   return (
     <motion.div variants={item} whileHover={{ y: -4 }}>
       <div className="bg-white border border-slate-100 rounded-2xl p-5 shadow-sm h-full">
-        <p className="text-[10px] font-black uppercase tracking-widest text-slate-400 flex items-center gap-1.5 mb-3">
+        {/* #9: was text-[10px] — bumped to text-xs so card labels are legible */}
+        <p className="text-xs font-black uppercase tracking-widest text-slate-400 flex items-center gap-1.5 mb-3">
           <Icon className="h-3 w-3" style={{ color: accent }} />{label}
         </p>
         <div className="text-2xl font-black tracking-tight mb-1" style={{ color: accent }}>{value}</div>
-        {sub && <p className="text-[10px] text-slate-400 font-semibold uppercase">{sub}</p>}
+        {/* #3: removed uppercase from sub-text — sentence-case is easier to read */}
+        {sub && <p className="text-xs text-slate-400 font-semibold">{sub}</p>}
       </div>
     </motion.div>
   );
@@ -65,7 +67,8 @@ function SalaryChart({ data }) {
   }));
   return (
     <ResponsiveContainer width="100%" height="100%">
-      <AreaChart data={mapped} margin={{ top: 10, right: 20, left: 0, bottom: 50 }}>
+      {/* #12: right margin 20→0 removes dead right-side space; bottom 50→60 gives label room */}
+      <AreaChart data={mapped} margin={{ top: 10, right: 0, left: 0, bottom: 60 }}>
         <defs>
           {[["entry", "#CBD5E1"], ["med", "#4F46E5"], ["peak", "#10B981"]].map(([id, c]) => (
             <linearGradient key={id} id={`area${id}`} x1="0" y1="0" x2="0" y2="1">
@@ -75,8 +78,9 @@ function SalaryChart({ data }) {
           ))}
         </defs>
         <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#E2E8F0" opacity={0.4} />
+        {/* #1: chart axis tick font bumped to 11px (closest Tailwind equivalent; recharts prop) */}
         <XAxis dataKey="name" axisLine={false} tickLine={false}
-          tick={{ fill: "#64748B", fontSize: 10, fontWeight: 700 }}
+          tick={{ fill: "#64748B", fontSize: 11, fontWeight: 700 }}
           interval={0} angle={-18} textAnchor="end" />
         <YAxis axisLine={false} tickLine={false}
           tick={{ fill: "#94A3B8", fontSize: 10 }}
@@ -86,7 +90,8 @@ function SalaryChart({ data }) {
             <p className="font-black text-xs mb-2">{label}</p>
             {payload.map((p) => (
               <div key={p.name} className="flex justify-between gap-4">
-                <span className="text-[10px] text-slate-500">{p.name}</span>
+                {/* #1: tooltip label text-[10px] → text-xs */}
+                <span className="text-xs text-slate-500">{p.name}</span>
                 <span className="text-xs font-bold" style={{ color: p.color }}>₹{p.value.toFixed(1)}L</span>
               </div>
             ))}
@@ -123,7 +128,8 @@ function HiringPie({ data }) {
         {pieData.map((d) => (
           <div key={d.name} className="flex items-center gap-1.5">
             <div className="h-2.5 w-2.5 rounded-full" style={{ backgroundColor: d.color }} />
-            <span className="text-[10px] font-bold text-slate-500 uppercase">{d.name}</span>
+          {/* #1: pie legend text-[10px] → text-xs */}
+          <span className="text-xs font-bold text-slate-500">{d.name}</span>
           </div>
         ))}
       </div>
@@ -156,7 +162,8 @@ export default function InsightTopHalf({ insights }) {
           sub="Hiring velocity" icon={BarChart2} accent="#4F46E5" />
         <motion.div variants={item} whileHover={{ y: -4 }}>
           <div className="bg-white border border-indigo-100 rounded-2xl p-5 shadow-sm h-full">
-            <p className="text-[10px] font-black uppercase tracking-widest text-slate-400 flex items-center gap-1.5 mb-2">
+            {/* #9: was text-[10px] — bumped to text-xs for the Readiness card label */}
+            <p className="text-xs font-black uppercase tracking-widest text-slate-400 flex items-center gap-1.5 mb-2">
               <Target className="h-3 w-3 text-indigo-500" />Your Readiness
             </p>
             <ReadinessGauge score={score} color={rColor} />
@@ -172,12 +179,14 @@ export default function InsightTopHalf({ insights }) {
         <motion.div variants={item} className="lg:col-span-2">
           <div className="bg-white border border-slate-100 rounded-2xl shadow-sm p-5 h-[380px] flex flex-col">
             <div className="flex items-center justify-between mb-4">
+              {/* #4: was text-[10px] uppercase — sentence-case + text-xs */}
               <div>
                 <p className="font-black text-base">Salary Benchmark</p>
-                <p className="text-[10px] text-slate-400 uppercase tracking-widest">Market Distribution (INR)</p>
+                <p className="text-xs text-slate-400">Market distribution (INR)</p>
               </div>
-              <span className="text-[9px] font-bold bg-emerald-50 text-emerald-600 border border-emerald-100 rounded-full px-2 py-1">
-                2025 DATA
+              {/* #1: was text-[9px] — bumped to text-xs */}
+              <span className="text-xs font-bold bg-emerald-50 text-emerald-600 border border-emerald-100 rounded-full px-2 py-1">
+                2025 Data
               </span>
             </div>
             <div className="flex-1">
@@ -188,7 +197,8 @@ export default function InsightTopHalf({ insights }) {
         <motion.div variants={item}>
           <div className="bg-white border border-slate-100 rounded-2xl shadow-sm p-5 h-[380px] flex flex-col">
             <p className="font-black text-base mb-1">Where Jobs Are</p>
-            <p className="text-[10px] text-slate-400 uppercase tracking-widest mb-4">Work Format Breakdown</p>
+            {/* #4: was text-[10px] uppercase — sentence-case + text-xs */}
+            <p className="text-xs text-slate-400 mb-4">Work format breakdown</p>
             <div className="flex-1">
               <HiringPie data={insights.hiringTrends} />
             </div>
@@ -204,14 +214,16 @@ export default function InsightTopHalf({ insights }) {
               <div className="p-1.5 bg-emerald-50 rounded-lg"><Zap className="h-4 w-4 text-emerald-500" /></div>
               <div>
                 <p className="font-black text-sm">Skill Salary Boost</p>
-                <p className="text-[10px] text-slate-400">Learn these to increase market value</p>
+                {/* #1: was text-[10px] — bumped to text-xs */}
+                <p className="text-xs text-slate-400">Learn these to increase market value</p>
               </div>
             </div>
             <div className="space-y-4">
               {(insights.skillSalaryBoost || []).map((s, i) => (
                 <div key={i}>
                   <div className="flex justify-between mb-1.5">
-                    <span className="text-xs font-bold uppercase tracking-tight">{s.skill}</span>
+                    {/* #5: was uppercase — sentence-case is readable for 22-char skill names */}
+                    <span className="text-xs font-bold tracking-tight">{s.skill}</span>
                     <span className="text-xs font-black text-emerald-500">+{s.boostPercent}% salary</span>
                   </div>
                   <AnimatedBar pct={Math.min(s.boostPercent * 5, 100)} color="#10B981" />
@@ -228,13 +240,15 @@ export default function InsightTopHalf({ insights }) {
               <div className="p-1.5 bg-primary/10 rounded-lg"><Star className="h-4 w-4 text-primary" /></div>
               <div>
                 <p className="font-black text-sm">Roles Hiring Now</p>
-                <p className="text-[10px] text-slate-400">Most in-demand job titles</p>
+                {/* #1: was text-[10px] — bumped to text-xs */}
+                <p className="text-xs text-slate-400">Most in-demand job titles</p>
               </div>
             </div>
             <div className="space-y-2">
               {(insights.topJobTitles || []).map((title, i) => (
                 <div key={i} className="flex items-center gap-3 p-3 bg-slate-50 rounded-xl hover:bg-indigo-50 transition-colors group">
-                  <div className="h-7 w-7 rounded-lg bg-primary/10 flex items-center justify-center text-[10px] font-black text-primary">
+                  {/* #1: was text-[10px] — bumped to text-xs */}
+                  <div className="h-7 w-7 rounded-lg bg-primary/10 flex items-center justify-center text-xs font-black text-primary">
                     {String(i + 1).padStart(2, "0")}
                   </div>
                   <span className="text-xs font-semibold flex-1">{title}</span>

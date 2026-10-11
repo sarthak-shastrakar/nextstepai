@@ -2,12 +2,12 @@
 
 import React, { useState, useEffect } from "react";
 import { useSession } from "next-auth/react";
-import { motion, AnimatePresence } from "framer-motion";
+import { motion } from "framer-motion";
 import Link from "next/link";
+import Image from "next/image";
 import {
   FileText, MessageSquare, FileSignature,
-  TrendingUp, BrainCircuit, CheckCircle2,
-  Sparkles, ArrowRight, Star,
+  TrendingUp, CheckCircle2, Star,
 } from "lucide-react";
 import {
   AreaChart, Area, XAxis, YAxis,
@@ -168,11 +168,17 @@ export default function DashboardMockup() {
           {/* ── Top bar ─────────────────────────────────────────── */}
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-2.5">
-              <div className="w-8 h-8 rounded-xl bg-indigo-600 flex items-center justify-center shadow-md shadow-indigo-600/30">
-                <span className="text-white font-black text-xs">CF</span>
+              <div className="w-8 h-8 relative flex items-center justify-center">
+                <Image
+                  src="/logo-image.png"
+                  alt="Levora"
+                  width={32}
+                  height={32}
+                  className="w-full h-full object-contain"
+                />
               </div>
               <span className="font-extrabold text-slate-900 tracking-tight text-base">
-                CareerForge <span className="text-indigo-600 text-[10px] align-top">AI</span>
+                Levora <span className="text-indigo-600 text-[10px] align-top">AI</span>
               </span>
             </div>
 
@@ -211,7 +217,8 @@ export default function DashboardMockup() {
                   className="group p-4 rounded-2xl border border-slate-100 bg-white shadow-[0_2px_10px_rgba(0,0,0,0.02)] flex flex-col gap-2.5 cursor-pointer hover:border-indigo-200 transition-all"
                 >
                   <div className="flex justify-between items-start">
-                    <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider leading-tight">{stat.label}</span>
+                    {/* Issue #5: sentence-case + text-xs (12px) so stat card labels are readable */}
+                  <span className="text-xs font-bold text-slate-400 tracking-wider leading-tight">{stat.label}</span>
                     <div className={`p-1.5 rounded-lg ${stat.bg} group-hover:scale-110 transition-transform`}>
                       <stat.icon className={`w-3.5 h-3.5 ${stat.color}`} />
                     </div>
@@ -244,7 +251,8 @@ export default function DashboardMockup() {
               className="lg:col-span-2 p-5 rounded-2xl border border-slate-100 shadow-[0_2px_10px_rgba(0,0,0,0.03)] flex flex-col"
             >
               <div className="flex items-center justify-between mb-4">
-                <h3 className="font-bold text-sm text-slate-900">Resume Progress</h3>
+                {/* Issue #8: was h3 — h2 fixes the H1→H3 skip in the document outline */}
+              <h2 className="font-bold text-sm text-slate-900">Resume Progress</h2>
                 {!loading && (
                   <span className="text-xs font-semibold text-emerald-600 bg-emerald-50 border border-emerald-100 px-2.5 py-1 rounded-full">
                     {d.resumeScore}% complete
@@ -301,7 +309,8 @@ export default function DashboardMockup() {
               transition={{ delay: 0.55 }}
               className="p-5 rounded-2xl border border-slate-100 shadow-[0_2px_10px_rgba(0,0,0,0.03)] flex flex-col gap-4"
             >
-              <h3 className="font-bold text-sm text-slate-900">Interview Performance</h3>
+              {/* Issue #8: was h3 — h2 for consistent document outline */}
+              <h2 className="font-bold text-sm text-slate-900">Interview Performance</h2>
 
               {loading ? (
                 <div className="flex flex-col gap-4 mt-1">
@@ -330,7 +339,8 @@ export default function DashboardMockup() {
               <div className="mt-auto pt-2 flex items-center gap-2 bg-indigo-50/70 rounded-xl px-3 py-2.5">
                 <Star className="w-4 h-4 fill-amber-400 text-amber-400 shrink-0" />
                 <div>
-                  <p className="text-[10px] text-slate-500 font-medium">Total Sessions</p>
+                  {/* Issue #6: bumped label from text-[10px] to text-xs (12px) */}
+                  <p className="text-xs text-slate-500 font-medium">Total Sessions</p>
                   <p className="text-sm font-extrabold text-slate-800">
                     {loading ? "—" : `${d.interviewsDone} Completed`}
                   </p>
@@ -339,55 +349,18 @@ export default function DashboardMockup() {
             </motion.div>
           </div>
 
-          {/* ── Bottom Row ───────────────────────────────────────── */}
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-5">
-
-            {/* AI Skill Suggestions */}
-            <Link href="/industry-insights">
-              <motion.div
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.65 }}
-                whileHover={{ scale: 1.015 }}
-                className="p-5 rounded-2xl bg-gradient-to-br from-indigo-50/80 to-violet-50/60 border border-indigo-100 flex flex-col gap-4 relative overflow-hidden cursor-pointer hover:border-indigo-300 hover:shadow-md transition-all group"
-              >
-                <BrainCircuit className="absolute -right-5 -bottom-5 w-28 h-28 text-indigo-100 opacity-60 group-hover:opacity-90 transition-opacity" />
-                <h3 className="font-bold text-sm text-indigo-900 flex items-center gap-2 relative z-10">
-                  <Sparkles className="w-4 h-4 text-indigo-600" />
-                  {stats?.skills?.length ? "Your Skills" : "AI Skill Suggestions"}
-                  <ArrowRight className="w-3 h-3 ml-auto opacity-0 group-hover:opacity-100 transition-opacity text-indigo-500" />
-                </h3>
-
-                <div className="flex flex-wrap gap-2 relative z-10">
-                  {loading
-                    ? [1, 2, 3, 4, 5].map(i => <Shimmer key={i} className="h-6 w-16 rounded-full" />)
-                    : d.skills.map((badge, i) => (
-                        <motion.span
-                          key={i}
-                          initial={{ opacity: 0, scale: 0.8 }}
-                          animate={{ opacity: 1, scale: 1 }}
-                          transition={{ delay: 0.75 + i * 0.07 }}
-                          className="px-3 py-1 bg-white text-indigo-700 text-[10px] font-bold rounded-full shadow-sm border border-indigo-100 group-hover:border-indigo-300 transition-colors"
-                        >
-                          {badge}
-                        </motion.span>
-                      ))
-                  }
-                </div>
-                <p className="text-[10px] text-indigo-500 font-semibold relative z-10">
-                  Based on your profile &amp; market trends
-                </p>
-              </motion.div>
-            </Link>
-
-            {/* Recent Activity */}
+          {/* ── Bottom Row ────────────────────────────────────────── */}
+          {/* Issue #12: AI Skill Suggestions removed — reduces hero clutter  */}
+          {/* Issue #15: Recent Activity spans full width — fixes imbalance  */}
+          <div className="grid grid-cols-1 gap-5">
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.75 }}
               className="p-5 rounded-2xl border border-slate-100 shadow-[0_2px_10px_rgba(0,0,0,0.03)] flex flex-col gap-3"
             >
-              <h3 className="font-bold text-sm text-slate-900">Recent Activity</h3>
+              {/* Issue #8: promoted from h3 → h2 to avoid H1→H3 heading skip */}
+              <h2 className="font-bold text-sm text-slate-900">Recent Activity</h2>
 
               <div className="flex flex-col gap-1.5 mt-1">
                 {loading
@@ -412,7 +385,8 @@ export default function DashboardMockup() {
                             <span className="text-xs font-semibold text-slate-700 flex-1 group-hover:text-indigo-700 transition-colors line-clamp-1">
                               ✅ {activity.text}
                             </span>
-                            <span className="text-[10px] text-slate-400 font-medium shrink-0 whitespace-nowrap">
+                            {/* Issue #6: text-xs (12px) — was text-[10px] */}
+                            <span className="text-xs text-slate-400 font-medium shrink-0 whitespace-nowrap">
                               {timeAgo(activity.time)}
                             </span>
                           </motion.div>
@@ -425,7 +399,8 @@ export default function DashboardMockup() {
               {/* Weekly goal footer */}
               {!loading && (
                 <div className="mt-auto pt-2 border-t border-slate-100">
-                  <div className="flex justify-between text-[10px] font-semibold text-slate-500 mb-1.5">
+                  {/* Issue #6: text-xs — was text-[10px] */}
+                  <div className="flex justify-between text-xs font-semibold text-slate-500 mb-1.5">
                     <span>Weekly Goal</span>
                     <span className="text-indigo-600">
                       {Math.min(d.recentActivity.length, 3)} / 3 done
@@ -442,7 +417,6 @@ export default function DashboardMockup() {
                 </div>
               )}
             </motion.div>
-
           </div>
         </div>
       </div>

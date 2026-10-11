@@ -37,7 +37,7 @@ function SalaryByExp({ data, userExp }) {
               <div className="flex items-center gap-2">
                 <div className="h-2 w-2 rounded-full" style={{ backgroundColor: color }} />
                 <span className="text-xs font-bold">{label}</span>
-                {isUser && <span className="text-[9px] font-black bg-indigo-600 text-white px-1.5 py-0.5 rounded-full">You</span>}
+                {isUser && <span className="text-xs font-black bg-indigo-600 text-white px-1.5 py-0.5 rounded-full">You</span>}
               </div>
               <span className="text-xs font-black" style={{ color }}>
                 {lpa(d.min)} – {lpa(d.max)}
@@ -63,7 +63,8 @@ function TopCompanies({ companies }) {
           </div>
           <div className="flex-1 min-w-0">
             <p className="text-xs font-bold truncate">{c.name}</p>
-            <p className="text-[10px] text-slate-500 truncate">{c.role}</p>
+            {/* #1: was text-[10px] — bumped to text-xs */}
+            <p className="text-xs text-slate-500 truncate">{c.role}</p>
           </div>
         </motion.div>
       ))}
@@ -82,7 +83,8 @@ function Certifications({ certs }) {
           </div>
           <div className="flex-1 min-w-0">
             <p className="text-xs font-bold">{c.name}</p>
-            <p className="text-[10px] text-slate-500">{c.provider}</p>
+            {/* #1: was text-[10px] — bumped to text-xs */}
+            <p className="text-xs text-slate-500">{c.provider}</p>
           </div>
           <span className="text-sm font-black text-amber-600 flex-shrink-0">
             +{c.boostPercent}%
@@ -108,13 +110,15 @@ function SkillsGap({ topSkills, userSkills }) {
   );
   return (
     <div className="flex flex-wrap gap-2">
+      {/* #7: was text-[11px] — bumped to text-xs (12px minimum) */}
       {matched.map((s) => (
-        <span key={s} className="flex items-center gap-1 text-[11px] font-bold bg-emerald-50 text-emerald-700 border border-emerald-100 rounded-full px-3 py-1">
+        <span key={s} className="flex items-center gap-1 text-xs font-bold bg-emerald-50 text-emerald-700 border border-emerald-100 rounded-full px-3 py-1">
           <CheckCircle2 className="h-3 w-3" />{s}
         </span>
       ))}
+      {/* #7: missing skills — was text-[11px], now text-xs */}
       {missing.map((s) => (
-        <span key={s} className="text-[11px] font-bold bg-orange-50 text-orange-600 border border-orange-100 rounded-full px-3 py-1">
+        <span key={s} className="text-xs font-bold bg-orange-50 text-orange-600 border border-orange-100 rounded-full px-3 py-1">
           ✕ {s}
         </span>
       ))}
@@ -133,10 +137,15 @@ function CareerPlaybook({ entryTips, switchTips }) {
           { id: "switch", label: "Career Switch", icon: Repeat2, color: "emerald" },
         ].map(({ id, label, icon: Icon, color }) => (
           <button key={id} onClick={() => setTab(id)}
-            className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-[11px] font-black uppercase tracking-wide transition-all ${tab === id ? `bg-${color}-600 text-white shadow` : "bg-slate-100 text-slate-500 hover:bg-slate-200"}`}>
-            <Icon className="h-3.5 w-3.5" />{label}
-          </button>
-        ))}
+            /* #14: inactive tab has a clear border + text contrast; #2: text-xs, no uppercase */
+            className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-black transition-all ${
+            tab === id
+              ? `bg-${color}-600 text-white shadow`
+              : "border border-slate-300 bg-white text-slate-600 hover:border-primary hover:text-primary"
+          }`}>
+          <Icon className="h-3.5 w-3.5" />{label}
+        </button>
+      ))}
       </div>
       <AnimatePresence mode="wait">
         <motion.div key={tab}
@@ -144,7 +153,8 @@ function CareerPlaybook({ entryTips, switchTips }) {
           className="space-y-3">
           {(tab === "entry" ? entryTips : switchTips || []).map((tip, i) => (
             <div key={i} className={`flex items-start gap-3 p-4 rounded-xl border ${tab === "entry" ? "bg-indigo-50/60 border-indigo-100" : "bg-emerald-50/60 border-emerald-100"}`}>
-              <div className={`h-7 w-7 rounded-lg flex items-center justify-center text-[10px] font-black text-white flex-shrink-0 ${tab === "entry" ? "bg-indigo-600" : "bg-emerald-600"}`}>
+              {/* #2/#1: was text-[10px] — bumped to text-xs */}
+              <div className={`h-7 w-7 rounded-lg flex items-center justify-center text-xs font-black text-white flex-shrink-0 ${tab === "entry" ? "bg-indigo-600" : "bg-emerald-600"}`}>
                 {String(i + 1).padStart(2, "0")}
               </div>
               <p className="text-xs font-semibold text-slate-700 leading-relaxed">{tip}</p>
@@ -171,14 +181,15 @@ export default function InsightBottomHalf({ insights }) {
           <div className="flex items-center gap-2 mb-4">
             <div className="p-1.5 bg-amber-50 rounded-lg"><TrendingUp className="h-4 w-4 text-amber-500" /></div>
             <p className="font-black text-sm">Key Industry Trends</p>
-            <span className="ml-auto text-[9px] font-black text-amber-600 bg-amber-50 border border-amber-100 px-2 py-0.5 rounded-full uppercase">Live</span>
+            {/* #13: was text-[9px] — bumped to text-xs; label kept short so uppercase is fine */}
+            <span className="ml-auto text-xs font-black text-amber-600 bg-amber-50 border border-amber-100 px-2 py-0.5 rounded-full uppercase">Live</span>
           </div>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
             {(insights.keyTrends || []).map((t, i) => (
               <motion.div key={i} whileHover={{ x: 4 }}
                 className="flex items-start gap-3 p-3.5 bg-slate-50 hover:bg-amber-50/50 rounded-xl border border-slate-100 hover:border-amber-100 transition-all">
-                <div className="h-2 w-2 rounded-full mt-1.5 flex-shrink-0"
-                  style={{ backgroundColor: i % 3 === 0 ? "#4F46E5" : i % 3 === 1 ? "#10B981" : "#F59E0B" }} />
+                {/* #13: was cycling indigo/emerald/amber — consolidated to single brand dot for less visual noise */}
+                <div className="h-2 w-2 rounded-full mt-1.5 flex-shrink-0 bg-primary/50" />
                 <p className="text-xs font-semibold text-slate-700 leading-snug">{t}</p>
               </motion.div>
             ))}
@@ -215,7 +226,8 @@ export default function InsightBottomHalf({ insights }) {
             <div className="flex items-center gap-2 mb-4">
               <div className="p-1.5 bg-amber-50 rounded-lg"><Award className="h-4 w-4 text-amber-500" /></div>
               <p className="font-black text-sm">Related Certifications</p>
-              <span className="text-[9px] text-slate-400 ml-1">Boosts salary</span>
+              {/* #1: was text-[9px] — bumped to text-xs */}
+              <span className="text-xs text-slate-400 ml-1">Boosts salary</span>
             </div>
             <Certifications certs={insights.certifications} />
           </div>
@@ -225,7 +237,8 @@ export default function InsightBottomHalf({ insights }) {
             <div className="flex items-center gap-2 mb-4">
               <div className="p-1.5 bg-primary/10 rounded-lg"><CheckCircle2 className="h-4 w-4 text-primary" /></div>
               <p className="font-black text-sm">Your Skills Gap</p>
-              <span className="text-[9px] text-slate-400 ml-1">vs industry top skills</span>
+              {/* #6: was text-[9px] — bumped to text-xs (12px minimum) */}
+              <span className="text-xs text-slate-400 ml-1">vs industry top skills</span>
             </div>
             <SkillsGap topSkills={insights.topSkills} userSkills={insights.userSkills} />
           </div>

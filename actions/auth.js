@@ -1,14 +1,7 @@
 "use server";
-
-// ============================================================
-// actions/auth.js — Complete Authentication Server Actions
-// Includes: register, verifyEmail, forgotPassword, resetPassword,
-//           loginWithMobile, completeProfile, verifyIdentity,
-//           resetPasswordDirect, checkUsernameAvailability
-// ============================================================
 import bcrypt from "bcryptjs";
 import { z } from "zod";
-import dbConnect from "@/lib/mongoose";
+import dbConnect from "@/lib/mongoose"; 
 import User from "@/models/User";
 import { generateVerificationToken, generateResetToken } from "@/lib/tokens";
 import {
@@ -448,7 +441,7 @@ export async function completeProfile(formData) {
 
     return {
       success: true,
-      message: "Profile completed successfully! Welcome to NextStep AI.",
+      message: "Profile completed successfully! Welcome to Levora.",
     };
   } catch (error) {
     console.error("[completeProfile] Error:", error.message);
@@ -593,7 +586,7 @@ export async function setProfilePassword(password, confirmPassword, skipped = fa
     sendPushNotification({
       userId: session.user.id,
       title: "You're all set! 🎉",
-      message: `Welcome to CareerForge AI, ${session.user?.name?.split(' ')[0] || 'there'}! Your account is ready. Let's build your career!`,
+      message: `Welcome to Levora, ${session.user?.name?.split(' ')[0] || 'there'}! Your account is ready. Let's build your career!`,
       url: "/dashboard"
     }).catch(() => { });
 

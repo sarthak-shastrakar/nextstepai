@@ -138,7 +138,8 @@ export default function Home() {
                 <h3 className="text-3xl sm:text-4xl md:text-5xl font-extrabold gradient-title tracking-tighter">
                   <CountUp to={stat.value} suffix={stat.suffix} />
                 </h3>
-                <p className="text-[10px] md:text-xs font-bold text-muted-foreground uppercase tracking-[0.2em] px-2">
+                {/* Issue #14: was text-[10px] md:text-xs — bumped to text-xs md:text-sm for legibility */}
+                <p className="text-xs md:text-sm font-bold text-muted-foreground uppercase tracking-[0.15em] px-2">
                   {stat.label}
                 </p>
               </div>
@@ -296,7 +297,9 @@ export default function Home() {
             ) : (
               <div className="py-20 text-center border-2 border-dashed border-slate-200 rounded-[2rem] w-full max-w-2xl mx-auto bg-white">
                  <Quote className="h-12 w-12 text-slate-200 mx-auto mb-4" />
-                 <p className="text-slate-400 font-bold uppercase tracking-widest text-xs">Waiting for the first success story.</p>
+                 {/* Issue #11: was ALL-CAPS anonymous placeholder — changed to sentence-case readable copy */}
+                 <p className="text-slate-400 font-semibold text-sm">Be the first to share your success story.</p>
+                 <p className="text-slate-300 text-xs mt-1">Real user reviews will appear here.</p>
               </div>
             )}
           </div>
@@ -305,7 +308,7 @@ export default function Home() {
             {session?.user ? (
               <>
                 <div className="text-center mb-10">
-                  <h3 className="text-2xl font-bold text-slate-900 mb-2">Impacted by CareerForge?</h3>
+                  <h3 className="text-2xl font-bold text-slate-900 mb-2">Impacted by Levora?</h3>
                   <p className="text-slate-400 text-sm font-medium">Your story helps others unlock their potential.</p>
                 </div>
 
@@ -335,7 +338,7 @@ export default function Home() {
               <div className="card-premium p-12 md:p-20 text-center border border-slate-100 bg-white rounded-[3rem] shadow-xl relative group overflow-hidden w-full">
                 <h3 className="text-3xl md:text-4xl font-extrabold mb-4 tracking-tight">Ready to share your own success?</h3>
                 <p className="text-slate-500 text-lg mb-12 max-w-lg mx-auto font-medium leading-relaxed">
-                   Join an elite network of professionals and help others navigate their career journey by sharing your CareerForge experience.
+                   Join an elite network of professionals and help others navigate their career journey by sharing your Levora experience.
                 </p>
                 <Link href="/login">
                   <Button size="lg" className="btn-premium-glow h-16 rounded-[1.25rem] px-12 font-black text-lg shadow-2xl">
@@ -359,7 +362,7 @@ export default function Home() {
             className="text-center mb-16 space-y-4 md:space-y-5 px-4"
           >
             <h2 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-extrabold tracking-[-0.03em] text-foreground leading-tight">Common Questions.</h2>
-            <p className="text-muted-foreground text-base md:text-lg">Everything you need to know about the CareerForge ecosystem.</p>
+            <p className="text-muted-foreground text-base md:text-lg">Everything you need to know about the Levora platform.</p>
           </motion.div>
 
           <Accordion type="single" collapsible className="w-full space-y-3">
@@ -446,7 +449,7 @@ export default function Home() {
                     size="lg"
                     className="btn-premium-glow relative h-14 px-10 text-lg font-bold rounded-2xl border-none w-full sm:w-auto"
                   >
-                    Enter CareerForge
+                    Enter Levora
                     <ArrowRight className="ml-2.5 h-5 w-5" />
                   </Button>
                 </motion.div>

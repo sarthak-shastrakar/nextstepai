@@ -306,7 +306,7 @@ export default function ResumeBuilder({ initialContent, userIndustry, user: full
             Resume Builder
           </h1>
           <p className="text-[10px] text-muted-foreground font-semibold mt-1 uppercase tracking-widest flex items-center gap-2">
-            NextStep AI
+            Levora
             {!isSaving && saveResult && (
               <span className="flex items-center gap-1 text-emerald-500 normal-case">
                 <span className="h-1.5 w-1.5 rounded-full bg-emerald-500 animate-pulse" />

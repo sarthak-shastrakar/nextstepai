@@ -109,6 +109,39 @@
   --sidebar-ring: #10B981;
 }
 
+/* ═══════════════════════════════════════════════════
+   DESIGN SYSTEM TOKENS — Type scale, radii, colour aliases
+   Issue #1: type scale  (≤ 8 steps)
+   Issue #2: colour aliases route ad-hoc values to tokens
+   Issue #3: border-radius scale (≤ 5 steps)
+   ═══════════════════════════════════════════════════ */
+:root {
+  /* ── Type scale ── */
+  --fs-label:   0.75rem;   /* 12 px – minimum for any visible copy */
+  --fs-body-sm: 0.875rem;  /* 14 px */
+  --fs-body:    1rem;      /* 16 px */
+  --fs-lg:      1.125rem;  /* 18 px */
+  --fs-xl:      1.25rem;   /* 20 px */
+  --fs-2xl:     1.5rem;    /* 24 px */
+  --fs-3xl:     1.875rem;  /* 30 px */
+
+  /* ── Colour aliases (maps ad-hoc slate/indigo values to tokens) ── */
+  --color-label:        #64748B; /* slate-500 — stat / card labels  */
+  --color-label-muted:  #94A3B8; /* slate-400 — secondary labels    */
+  --color-heading:      #0F172A; /* slate-900 — headings            */
+  --color-body:         #475569; /* slate-600 — body copy           */
+  --color-cta:          #4F46E5; /* indigo-600 — primary actions    */
+  --color-cta-hover:    #4338CA; /* indigo-700                      */
+  --color-cta-shadow:   rgba(79, 70, 229, 0.30);
+
+  /* ── Border-radius scale ── */
+  --radius-pill: 9999px;   /* badges, pills               */
+  --radius-xl:   1.25rem;  /* cards, large widgets        */
+  --radius-lg:   0.75rem;  /* small cards, inner panels   */
+  --radius-md:   0.5rem;   /* buttons, inputs             */
+  --radius-sm:   0.25rem;  /* tags, chips                 */
+}
+
 .dark {
   --background: #0B0F19; /* Deeper Dark for Emerald contrast */
   --foreground: #F1F5F9;
@@ -214,10 +247,11 @@
   }
 }
 
+/* Issue #10 / #4: unified indigo gradient so all primary CTAs match the hero */
 .btn-premium-glow {
   position: relative;
   overflow: hidden;
-  background: linear-gradient(135deg, #10B981 0%, #06B6D4 100%);
+  background: linear-gradient(135deg, #4F46E5 0%, #7C3AED 100%);
   color: #FFFFFF;
   border: none;
   font-weight: 700;
@@ -245,8 +279,35 @@
 }
 
 .btn-premium-glow:hover {
-  box-shadow: 0 8px 30px rgba(16, 185, 129, 0.4);
+  box-shadow: 0 8px 30px var(--color-cta-shadow);
   transform: translateY(-1px);
+}
+
+/* ── Primary CTA — single indigo style used everywhere (#4, #10) ── */
+.btn-primary-cta {
+  position: relative;
+  overflow: hidden;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  background: var(--color-cta);
+  color: #FFFFFF;
+  border: none;
+  font-weight: 700;
+  border-radius: var(--radius-md);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: 0 4px 14px var(--color-cta-shadow);
+}
+
+.btn-primary-cta:hover {
+  background: var(--color-cta-hover);
+  box-shadow: 0 8px 28px var(--color-cta-shadow);
+  transform: translateY(-1px);
+}
+
+.btn-primary-cta:active {
+  transform: translateY(0);
 }
 
 

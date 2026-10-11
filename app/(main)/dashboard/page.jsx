@@ -1,7 +1,7 @@
 import { getIndustryInsights } from "@/actions/industryInsight";
 import DashboardView from "./_components/dashboard-view";
 
-export const metadata = { title: "Industry Insights — CareerForge AI" };
+export const metadata = { title: "Industry Insights — Levora" };
 
 export default async function DashboardPage() {
   let insights = null;

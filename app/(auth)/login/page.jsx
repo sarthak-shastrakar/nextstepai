@@ -3,6 +3,7 @@ import { useState, useTransition, Suspense } from "react";
 import { signIn } from "next-auth/react";
 import { useRouter, useSearchParams } from "next/navigation";
 import Link from "next/link";
+import Image from "next/image";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
@@ -177,11 +178,20 @@ function Login() {
 
           {/* Header */}
           <motion.div variants={fadeUp} className="text-center mb-7">
-            <div className="inline-flex items-center justify-center w-14 h-14 rounded-2xl bg-gradient-to-br from-indigo-500 to-violet-600 shadow-lg shadow-indigo-500/30 mb-4">
-              <LogIn className="h-7 w-7 text-white" />
-            </div>
+            <Link href="/" className="inline-flex items-center justify-center mb-3 group">
+              <div className="w-14 h-14 relative transition-transform duration-300 group-hover:scale-105">
+                <Image
+                  src="/logo-image.png"
+                  alt="Levora"
+                  width={56}
+                  height={56}
+                  priority
+                  className="w-full h-full object-contain drop-shadow-[0_4px_16px_rgba(168,85,247,0.35)]"
+                />
+              </div>
+            </Link>
             <h1 className="text-2xl font-extrabold text-white tracking-tight">Welcome back</h1>
-            <p className="text-slate-400 text-sm mt-1">Sign in to your NextStep AI account</p>
+            <p className="text-slate-400 text-sm mt-1">Sign in to your Levora account</p>
           </motion.div>
 
           {/* Google Button */}

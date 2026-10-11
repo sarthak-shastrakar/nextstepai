@@ -524,7 +524,7 @@ export default function CompleteProfileForm({ prefill, industries }) {
                   </div>
                   <div>
                     <h2 className="text-lg font-bold text-white">Secure Your Account 🔐</h2>
-                    <p className="text-xs text-slate-400 leading-snug mt-1">Set a CareerForge AI password.<br/>This is different from your Google password and lets you login with email + password too.</p>
+                     <p className="text-xs text-slate-400 leading-snug mt-1">Set a Levora password.<br/>This is different from your Google password and lets you login with email + password too.</p>
                   </div>
                 </div>
 

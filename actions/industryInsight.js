@@ -14,7 +14,7 @@ async function generateWithAI(prompt, userContext) {
     prompt,
     userContext,
     {
-      maxTokens: 2000,
+      maxTokens: 1250,
       retryCount: 3,
       isText: false,
       system:
@@ -147,7 +147,6 @@ export async function getIndustryInsights(forceRefresh = false) {
   // ── Step 1: Check MongoDB cache ──────────────────────────────────────────
   let existing = await IndustryInsight.findOne({ userId }).lean();
 
-  // ── Helper: build lock info from existing record ──────────────────────
   const getLockInfo = (doc) => {
     if (!doc?.lastManualRefreshAt) return { manualRefreshLocked: false, manualRefreshUnlockAt: null };
     const elapsed = Date.now() - new Date(doc.lastManualRefreshAt).getTime();

@@ -150,7 +150,7 @@ export default function QuizResult({
                         <p className="text-xl md:text-2xl font-bold text-slate-800 leading-snug tracking-tight">
                             &quot;{result.improvementTip}&quot;
                         </p>
-                        <p className="text-[10px] font-black text-primary/50 uppercase tracking-[0.2em]">NextStep Recommendation Agent v4.1</p>
+                        <p className="text-[10px] font-black text-primary/50 uppercase tracking-[0.2em]">Levora Recommendation Agent v4.1</p>
                     </div>
                 </div>
              </div>

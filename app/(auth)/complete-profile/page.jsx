@@ -5,7 +5,7 @@ import User from "@/models/User";
 import { industries } from "@/data/industries";
 import CompleteProfileForm from "./_components/CompleteProfileForm";
 
-export const metadata = { title: "Complete Your Profile — NextStep AI" };
+export const metadata = { title: "Complete Your Profile — Levora" };
 
 export default async function CompleteProfilePage() {
   const session = await auth();

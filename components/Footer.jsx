@@ -2,6 +2,7 @@
 
 import React from "react";
 import Link from "next/link";
+import Image from "next/image";
 import { motion } from "framer-motion";
 import { 
   Linkedin, 
@@ -15,7 +16,7 @@ export default function Footer() {
   const socialLinks = {
     linkedin: "http://www.linkedin.com/in/sarthak-fullstack-developer",
     github: "https://github.com/sarthak-shastrakar",
-    portfolio: "https://sarthak-shastrakar.github.io/Portfolio",
+    portfolio: "https://myportfolio-6sz6.onrender.com",
     email: "mailto:sarthakshastrakar9@gmail.com"
   };
 
@@ -40,15 +41,19 @@ export default function Footer() {
           
           {/* ── Brand Section ── */}
           <motion.div variants={fadeUpVariant} className="space-y-6 lg:col-span-2">
-            <Link href="/" className="flex flex-col justify-center inline-block w-max">
-              <div className="flex items-start gap-0.5">
-                <span className="text-[#0f172a] font-extrabold text-2xl leading-none tracking-tight">
-                  CareerForge
-                </span>
-                <span className="text-[#4f46e5] font-black text-xs leading-none uppercase tracking-wider relative -top-0.5">
-                  AI
-                </span>
+            <Link href="/" className="flex items-center gap-2.5 group inline-flex w-max">
+              <div className="relative w-8 h-8 transition-transform duration-300 group-hover:scale-105">
+                <Image
+                  src="/logo-image.png"
+                  alt="Levora"
+                  width={32}
+                  height={32}
+                  className="w-full h-full object-contain"
+                />
               </div>
+              <span className="text-[#0f172a] font-extrabold text-2xl leading-none tracking-tight">
+                Levora
+              </span>
             </Link>
             <p className="text-[#64748b] leading-relaxed text-sm max-w-[320px]">
               Empowering professionals to achieve their true potential through advanced AI guidance, skill building, and interview intelligence.
@@ -73,7 +78,8 @@ export default function Footer() {
 
           {/* ── Explore Column ── */}
           <motion.div variants={fadeUpVariant}>
-            <h4 className="font-bold text-[#0f172a] text-sm uppercase tracking-wider mb-5">Explore</h4>
+            {/* Issue #9: was h4 — h3 fixes the H2→H4 skip in the heading outline */}
+            <h3 className="font-bold text-[#0f172a] text-sm uppercase tracking-wider mb-5">Explore</h3>
             <ul className="space-y-3.5 text-sm font-medium">
               {[["Dashboard", "/dashboard"], ["Resume Builder", "/resume"], ["Interview Prep", "/interviewprep"], ["Job Search", "/job-finding"]].map(([label, href]) => (
                 <li key={href}>
@@ -87,7 +93,8 @@ export default function Footer() {
 
           {/* ── Company Column ── */}
           <motion.div variants={fadeUpVariant}>
-            <h4 className="font-bold text-[#0f172a] text-sm uppercase tracking-wider mb-5">Company</h4>
+            {/* Issue #9: was h4 — h3 for consistent heading hierarchy */}
+            <h3 className="font-bold text-[#0f172a] text-sm uppercase tracking-wider mb-5">Company</h3>
             <ul className="space-y-3.5 text-sm font-medium">
               {["About Us", "Privacy Policy", "Terms of Service"].map(label => (
                 <li key={label}>
@@ -101,7 +108,8 @@ export default function Footer() {
 
           {/* ── Contact Column ── */}
           <motion.div variants={fadeUpVariant}>
-            <h4 className="font-bold text-[#0f172a] text-sm uppercase tracking-wider mb-5">Contact</h4>
+            {/* Issue #9: was h4 — h3 for consistent heading hierarchy */}
+            <h3 className="font-bold text-[#0f172a] text-sm uppercase tracking-wider mb-5">Contact</h3>
             <ul className="space-y-4 text-sm font-medium text-[#64748b]">
               <li>
                 <Link href={socialLinks.email} className="flex items-center gap-3 hover:text-[#4f46e5] transition-colors duration-200 group">
@@ -140,7 +148,7 @@ export default function Footer() {
 
         {/* ── Bottom Bar ── */}
         <motion.div variants={fadeUpVariant} className="pt-8 border-t border-slate-100 flex flex-col md:flex-row items-center justify-between gap-4 text-sm font-medium text-[#64748b]">
-          <p>© 2026 CareerForge AI. All rights reserved.</p>
+          <p>© 2026 Levora. All rights reserved.</p>
         </motion.div>
       </motion.div>
     </footer>

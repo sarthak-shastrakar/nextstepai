@@ -439,7 +439,7 @@ export default function HeaderAuth() {
                       <User className="w-8 h-8 text-[#4f46e5]" />
                     </div>
                     <div className="text-center">
-                      <p className="font-extrabold text-xl text-[#0f172a] mb-2">CareerForge</p>
+                      <p className="font-extrabold text-xl text-[#0f172a] mb-2">Levora</p>
                       <p className="text-sm text-[#64748b] px-4">Sign in to unlock AI-powered tools.</p>
                     </div>
                     <Link href="/login" onClick={() => setIsMobileMenuOpen(false)} className="w-full mt-4">

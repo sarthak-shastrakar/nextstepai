@@ -1,6 +1,8 @@
-# 🚀 NextStep AI — AI-Powered Career Coach
+# 🚀 Levora — AI-Powered Career Coach
 
-NextStep AI is a sophisticated, AI-driven career coaching platform built with **Next.js 15**. It empowers users to build professional resumes, generate tailored cover letters, prepare for interviews, and gain real-time industry insights using state-of-the-art AI models like **Google Gemini** and **OpenRouter**.
+Levora is a sophisticated, AI-driven career coaching platform built with **Next.js 15**. It empowers users to build professional resumes, generate tailored cover letters, prepare for interviews, and gain real-time industry insights using state-of-the-art AI models like **Google Gemini** and **OpenRouter**.
+
+> **Tagline**: Level up your career with AI.
 
 ---
 
@@ -82,7 +84,7 @@ For a successful deployment on Vercel or any other platform, ensure the followin
 2.  **Import to Vercel**:
     - Go to [Vercel Dashboard](https://vercel.com/dashboard).
     - Click "Add New" -> "Project".
-    - Import your `nextstepai` repository.
+    - Import your repository.
 3.  **Configure Environment Variables**:
     - Copy all keys from your `.env` file to the Vercel project settings.
     - Ensure `NEXTAUTH_URL` and `NEXT_PUBLIC_APP_URL` match your Vercel deployment URL.
@@ -102,7 +104,7 @@ For a successful deployment on Vercel or any other platform, ensure the followin
 1.  **Clone the repository**:
     ```bash
     git clone <your-repo-url>
-    cd nextstepai
+    cd levora
     ```
 2.  **Install dependencies**:
     ```bash

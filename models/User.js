@@ -1,5 +1,5 @@
 // ============================================================
-// models/User.js — NextStep AI User Schema
+// models/User.js — Levora User Schema
 // ============================================================
 import mongoose from "mongoose";
 

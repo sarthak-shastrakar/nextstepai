@@ -106,10 +106,11 @@ export default function DashboardView({ insights: initialInsights, error: initia
         className="flex flex-col xl:flex-row xl:items-center justify-between gap-6 border-b border-slate-100 pb-8">
         <div className="space-y-2">
           <div className="flex items-center gap-3 flex-wrap">
-            <div className="px-3 py-1 bg-primary/10 border border-primary/20 rounded-full text-[10px] font-black text-primary uppercase tracking-widest animate-pulse">
+            {/* #10: was text-[10px] — bumped to text-xs (12px minimum) */}
+            <div className="px-3 py-1 bg-primary/10 border border-primary/20 rounded-full text-xs font-black text-primary uppercase tracking-widest animate-pulse">
               Live Intelligence
             </div>
-            <div className="flex items-center gap-1.5 text-[10px] font-bold text-slate-400 uppercase tracking-widest">
+            <div className="flex items-center gap-1.5 text-xs font-bold text-slate-400 uppercase tracking-widest">
               <span className="relative flex h-2 w-2">
                 <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75" />
                 <span className="relative inline-flex h-2 w-2 rounded-full bg-emerald-500" />
@@ -117,20 +118,21 @@ export default function DashboardView({ insights: initialInsights, error: initia
               Market Live
             </div>
             {insights.fromCache && (
-              <div className="flex items-center gap-1 text-[10px] text-slate-400">
+              <div className="flex items-center gap-1 text-xs text-slate-400">
                 <Clock className="h-3 w-3" /> Cached · updated {lastGen}
               </div>
             )}
             {insights.aiError && (
-              <div className="flex items-center gap-1 text-[10px] text-amber-500">
+              <div className="flex items-center gap-1 text-xs text-amber-500">
                 <AlertTriangle className="h-3 w-3" /> Showing last available data
               </div>
             )}
           </div>
-          <h2 className="text-3xl sm:text-4xl font-black tracking-tighter gradient-title leading-tight">
+          {/* #8 / #11: was h2 — promoted to h1 so the page has a proper top-level heading */}
+          <h1 className="text-3xl sm:text-4xl font-black tracking-tighter gradient-title leading-tight">
             Industry Insights
             <span className="text-primary/40 ml-2 text-2xl">({insights.industry})</span>
-          </h2>
+          </h1>
           <p className="text-slate-400 text-sm">
             Last generated{" "}
             <span className="font-bold text-slate-600">{lastGen}</span>
@@ -142,13 +144,15 @@ export default function DashboardView({ insights: initialInsights, error: initia
         {/* Sync card */}
         <div className="flex items-center gap-3 bg-white border border-slate-100 rounded-2xl px-5 py-3 shadow-sm">
           <div className="text-center min-w-[40px]">
-            <p className="text-[9px] font-black uppercase text-primary leading-none">
+            {/* #10: was text-[9px] — bumped to text-xs */}
+            <p className="text-xs font-black uppercase text-primary leading-none">
               {nextUpd.split(" ")[0]}
             </p>
             <p className="text-xl font-black leading-none">{nextUpd.split(" ")[1]?.replace(",", "") || ""}</p>
           </div>
           <div className="flex-1 space-y-1">
-            <p className="text-[10px] font-black uppercase text-slate-400 tracking-widest">Next Auto-Sync</p>
+            {/* #10: was text-[10px] — bumped to text-xs */}
+            <p className="text-xs font-black uppercase text-slate-400 tracking-widest">Next Auto-Sync</p>
             <p className="text-xs font-bold">6-Month Auto-Refresh</p>
             <div className="h-1 w-full bg-slate-100 rounded-full overflow-hidden">
               <div className="h-full w-3/5 bg-gradient-to-r from-primary to-primary/40 rounded-full" />
@@ -161,7 +165,8 @@ export default function DashboardView({ insights: initialInsights, error: initia
                 <Lock className="h-3.5 w-3.5" />
                 Locked
               </div>
-              <p className="text-[9px] text-slate-400 font-medium text-center leading-tight">
+              {/* #10: was text-[9px] — bumped to text-xs */}
+              <p className="text-xs text-slate-400 font-medium text-center leading-tight">
                 Unlocks{" "}
                 {insights.manualRefreshUnlockAt
                   ? format(new Date(insights.manualRefreshUnlockAt), "MMM dd")
@@ -170,7 +175,7 @@ export default function DashboardView({ insights: initialInsights, error: initia
             </div>
           ) : (
             <button onClick={handleSync} disabled={syncing}
-              className="flex items-center gap-1.5 text-xs font-bold px-3 py-2 rounded-xl bg-slate-900 text-white hover:bg-slate-700 transition-all disabled:opacity-50 flex-shrink-0">
+              className="flex items-center gap-1.5 text-xs font-bold px-3 py-2 rounded-xl bg-primary text-white hover:bg-primary/90 transition-all disabled:opacity-50 flex-shrink-0">
               {syncing ? <Loader2 className="h-3.5 w-3.5 animate-spin" /> : <RefreshCcw className="h-3.5 w-3.5" />}
               {syncing ? "Syncing…" : "Refresh"}
             </button>

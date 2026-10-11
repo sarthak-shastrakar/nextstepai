@@ -1,5 +1,5 @@
 {
-  "name": "personal-career-coach",
+  "name": "levora",
   "version": "0.1.0",
   "private": true,
   "scripts": {
@@ -35,6 +35,7 @@
     "html2pdf": "^0.0.11",
     "html2pdf.js": "^0.12.0",
     "inngest": "^3.54.0",
+    "jsonwebtoken": "^9.0.3",
     "lucide-react": "^0.542.0",
     "mongoose": "^9.4.1",
     "next": "15.5.9",
